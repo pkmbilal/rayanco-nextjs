@@ -1,8 +1,21 @@
 import type { NextConfig } from "next";
 import { legacyRedirects } from "./lib/legacy-redirects";
 
+// R2 media bucket (custom domain). Listing photos are served from here via next/image.
+const mediaUrl = new URL(process.env.NEXT_PUBLIC_MEDIA_URL || "https://media.rayanco.com");
+
 const nextConfig: NextConfig = {
   cacheComponents: true,
+  images: {
+    formats: ["image/avif", "image/webp"],
+    remotePatterns: [
+      {
+        protocol: mediaUrl.protocol.replace(":", "") as "http" | "https",
+        hostname: mediaUrl.hostname,
+        pathname: "/**",
+      },
+    ],
+  },
   partialPrefetching: true,
   reactCompiler: true,
   turbopack: {
