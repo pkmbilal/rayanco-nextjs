@@ -85,3 +85,27 @@ export const materials: string[] = [
   "SS square bars", "SS billets", "SS waste & scrap", "Rail wheels", "Destroyed steel cars",
   "Broken machinery casts", "Bushing shredded scrap",
 ];
+
+const EQ = "/assets/images/Equipment_Resale";
+
+/**
+ * Equipment types from the legacy equipment resale page (typos fixed, image paths unchanged).
+ * `slug` matches the seeded `categories.slug` so step 5 can link each one to its category page.
+ */
+export const equipmentTypes: (CatalogItem & { slug: string })[] = [
+  { slug: "asphalt-concrete-plants", name: "Asphalt Concrete Plant", image: `${EQ}/Asphalt_Concrete_Plant.webp`, description: "Batch and drum asphalt plants for road construction." },
+  { slug: "compressors", name: "Compressors", image: `${EQ}/Compressor.webp`, description: "Portable and stationary air compressors." },
+  { slug: "concrete-pumps", name: "Concrete Pumps", image: `${EQ}/Concrete_Pumps.webp`, description: "Truck-mounted and trailer concrete pumps." },
+  { slug: "crane-barges", name: "Crane Barges", image: `${EQ}/Crane_Barge.webp`, description: "Floating crane barges for marine and port work." },
+  { slug: "cranes", name: "Cranes", image: `${EQ}/Cranes.webp`, description: "Mobile, crawler and rough-terrain cranes." },
+  { slug: "dozers", name: "Dozers", image: `${EQ}/Dozer.webp`, description: "Crawler bulldozers for earthmoving." },
+  { slug: "generators", name: "Generators", image: `${EQ}/Generators.webp`, description: "Diesel generator sets in a range of kVA ratings." },
+  { slug: "hydraulic-excavators", name: "Hydraulic Excavators", image: `${EQ}/Hydrolic_Excavator.webp`, description: "Crawler and wheeled hydraulic excavators." },
+  { slug: "piling-rigs", name: "Piling Rigs", image: `${EQ}/Piling_Rigs.webp`, description: "Rotary and impact piling rigs for foundations." },
+  { slug: "road-pavers", name: "Road Pavers", image: `${EQ}/Road_Paver.webp`, description: "Asphalt pavers and finishers." },
+  { slug: "road-rollers", name: "Road Rollers", image: `${EQ}/Road_Roller.webp`, description: "Tandem, pneumatic and single-drum road rollers." },
+  { slug: "tower-cranes", name: "Tower Cranes", image: `${EQ}/Tower_Cranes.webp`, description: "Tower cranes for high-rise and industrial projects." },
+  { slug: "vibratory-compactors", name: "Vibratory Compactors", image: `${EQ}/Vibratory_Compactor.webp`, description: "Soil and plate vibratory compactors." },
+  { slug: "welding-machines", name: "Welding Machines", image: `${EQ}/Welding_Machines.webp`, description: "Engine-driven and electric welding machines." },
+  { slug: "wheel-loaders", name: "Wheel Loaders", image: `${EQ}/Wheel_Loader.webp`, description: "Front-end wheel loaders for material handling." },
+];

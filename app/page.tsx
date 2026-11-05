@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { WhatsAppIcon } from "@/components/icons";
 import { CtaBand } from "@/components/sections/CtaBand";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { LogoGrid } from "@/components/sections/LogoGrid";
 import { ButtonLink } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
@@ -9,6 +10,7 @@ import { Heading } from "@/components/ui/Heading";
 import { Section } from "@/components/ui/Section";
 import { materials } from "@/content/catalog";
 import { getDictionary } from "@/lib/i18n";
+import { organizationJsonLd } from "@/lib/jsonld";
 import { pageMetadata } from "@/lib/seo";
 import { certifications, clients, whatsappUrl } from "@/lib/site";
 
@@ -52,6 +54,7 @@ export default function Home() {
 
   return (
     <>
+      <JsonLd data={organizationJsonLd()} />
       <section className="relative isolate overflow-hidden bg-steel-900 text-white">
         <Image
           src="/assets/images/Hero_bg.webp"

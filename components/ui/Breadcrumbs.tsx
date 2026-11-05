@@ -1,15 +1,21 @@
 import Link from "next/link";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { getDictionary } from "@/lib/i18n";
+import { breadcrumbJsonLd } from "@/lib/jsonld";
 
 export type Crumb = { name: string; href: string };
 
-/** Visual breadcrumb trail. The home crumb is added automatically; the last item is the current page. */
+/**
+ * Breadcrumb trail + matching BreadcrumbList JSON-LD.
+ * The home crumb is added automatically; the last item is the current page.
+ */
 export function Breadcrumbs({ items, className = "" }: { items: Crumb[]; className?: string }) {
   const t = getDictionary();
   const trail: Crumb[] = [{ name: t.breadcrumbs.home, href: "/" }, ...items];
 
   return (
     <nav aria-label={t.breadcrumbs.label} className={className}>
+      <JsonLd data={breadcrumbJsonLd(trail)} />
       <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-steel-500">
         {trail.map((crumb, i) => {
           const isLast = i === trail.length - 1;
