@@ -1,0 +1,87 @@
+/**
+ * Product catalogue reproduced from the legacy site (content/legacy/*.md).
+ * Image paths are unchanged so old image URLs keep ranking. All legacy images are 300×300 WebP.
+ */
+export type CatalogItem = {
+  name: string;
+  image: string;
+  description: string;
+};
+
+export const CATALOG_IMAGE_SIZE = 300;
+
+const P = "/assets/images/Products";
+const NF = "/assets/images/Non_Ferrous_Metals";
+const MS = "/assets/images/Metal_Scrap_Surplus_Materials";
+
+/** /products — 32 items, same order as the legacy page. */
+export const products: CatalogItem[] = [
+  { name: "Adjustable Base Jack", image: `${P}/Adjustable_Base_Jack.webp`, description: "Used and surplus scaffolding base jacks, bought and sold in bulk." },
+  { name: "Aluminium Ladders", image: `${P}/Aluminium_Ladders.webp`, description: "Used aluminium ladders for resale or recycling as aluminium scrap." },
+  { name: "Aluminium Scrap", image: `${P}/Aluminium_Scrap.webp`, description: "All grades of aluminium scrap, including extrusions, sheet and cast." },
+  { name: "Auto Batteries Scrap", image: `${P}/Auto_Batteries_Scrap.webp`, description: "Used lead-acid vehicle batteries collected for recycling." },
+  { name: "Big Pipes", image: `${P}/Big_Pipes.webp`, description: "Large-diameter steel pipes from projects, plants and pipelines." },
+  { name: "Billets", image: `${P}/Billets.webp`, description: "Steel billets for re-rolling and supply to steel producers." },
+  { name: "Bolts & Screws", image: `${P}/Bolts_n_Screws.webp`, description: "Surplus and scrap fasteners in mixed or sorted lots." },
+  { name: "Brass Scrap", image: `${P}/Brass_Scrap.webp`, description: "Brass fittings, valves, turnings and mixed brass scrap." },
+  { name: "Cables", image: `${P}/Cables.webp`, description: "Used and surplus power and control cables with copper or aluminium cores." },
+  { name: "Clamps", image: `${P}/Clamps.webp`, description: "Scaffolding couplers and clamps, used or surplus." },
+  { name: "Containers", image: `${P}/Containers.webp`, description: "Used shipping and storage containers for resale or scrap." },
+  { name: "Copper Berry Cable", image: `${P}/Copper_Berry_Cable.webp`, description: "Bare bright copper wire (Berry grade), one of the highest-value copper grades." },
+  { name: "CS Pipes", image: `${P}/CS_Pipes.webp`, description: "Carbon steel pipes, new surplus or used, in all sizes." },
+  { name: "E-Waste", image: `${P}/E_Waste.webp`, description: "Electronic scrap, circuit boards and IT equipment for recovery." },
+  { name: "Elbows", image: `${P}/Elbows.webp`, description: "Surplus pipe elbows and fittings in carbon and stainless steel." },
+  { name: "Fence", image: `${P}/Fence.webp`, description: "Used steel fencing panels and mesh from sites and facilities." },
+  { name: "Fence Gate", image: `${P}/Fence_Gate.webp`, description: "Steel fence gates for resale or recycling." },
+  { name: "Ferrous Metal Scrap", image: `${P}/Ferrous_Metal_Scrap.webp`, description: "Mixed ferrous scrap, from light gauge to heavy melting steel." },
+  { name: "Fibre Glass", image: `${P}/Fibre_Glass.webp`, description: "Fibreglass tanks, pipes and panels from dismantled facilities." },
+  { name: "Flanges", image: `${P}/Flanges.webp`, description: "Surplus and used steel flanges in a wide range of ratings." },
+  { name: "Generators", image: `${P}/Generators.webp`, description: "Used generator sets for resale, parts or scrap." },
+  { name: "Granular Copper", image: `${P}/Granular_Copper.webp`, description: "Granulated copper recovered from cable processing." },
+  { name: "Iron Beams", image: `${P}/Iron_Beems.webp`, description: "Used and surplus structural steel beams." },
+  { name: "Light Poles", image: `${P}/Light_Poles.webp`, description: "Steel street and site light poles, used or surplus." },
+  { name: "Nickel Scrap", image: `${P}/Nickel_Scrap.webp`, description: "Nickel and nickel-alloy scrap." },
+  { name: "Office Portable Cabins", image: `${P}/Office_Portable_Cabins.webp`, description: "Used porta cabins and site offices for resale." },
+  { name: "Panel Boards", image: `${P}/Panel_Boards.webp`, description: "Electrical panel boards and switchgear for resale or recovery." },
+  { name: "Radiators", image: `${P}/Radiators.webp`, description: "Copper and aluminium radiators from vehicles and equipment." },
+  { name: "Rebars", image: `${P}/Rebars.webp`, description: "Surplus and scrap reinforcing steel bars." },
+  { name: "Stainless Steel", image: `${P}/Stainless_Steel.webp`, description: "Stainless steel tube, coils, sheets, bars and billets." },
+  { name: "Steel Plates", image: `${P}/Steel_Plates.webp`, description: "Used and surplus steel plates in various thicknesses." },
+  { name: "Wooden Boards", image: `${P}/Wooden_Boards.webp`, description: "Used scaffolding and timber boards from project sites." },
+];
+
+/** /products/non-ferrous-metals — 11 items. */
+export const nonFerrousMetals: CatalogItem[] = [
+  { name: "Alloy Steel", image: `${NF}/Alloy_Steel.webp`, description: "Alloy steel scrap and surplus, sorted by grade." },
+  { name: "Aluminium", image: `${NF}/Aluminium.webp`, description: "Aluminium scrap including zorba, extrusions, sheet and cast." },
+  { name: "Brass", image: `${NF}/Brass.webp`, description: "Yellow and red brass scrap, fittings and turnings." },
+  { name: "Bronze", image: `${NF}/Bronz.webp`, description: "Bronze scrap from bearings, bushings and marine fittings." },
+  { name: "Copper", image: `${NF}/Copper.webp`, description: "Copper wire, tube, cable and mixed copper scrap." },
+  { name: "Galvanized Steel", image: `${NF}/Galvanized_Steel.webp`, description: "Zinc-coated steel sheet, structures and scrap." },
+  { name: "Lead", image: `${NF}/lead.webp`, description: "Lead scrap from batteries, sheathing and soft lead." },
+  { name: "Stainless Steel", image: `${NF}/Stainless_Steel.webp`, description: "Stainless steel scrap in 304, 316 and other grades." },
+  { name: "Tin", image: `${NF}/Tin.webp`, description: "Tin and tin-bearing scrap." },
+  { name: "Tool Steel", image: `${NF}/Tool_Steel.webp`, description: "High-alloy tool steel scrap and offcuts." },
+  { name: "Zinc", image: `${NF}/Zinc.webp`, description: "Zinc die-cast, sheet and dross." },
+];
+
+/** /products/metal-scrap-surplus — 6 items. */
+export const metalScrapSurplus: CatalogItem[] = [
+  { name: "Beam", image: `${MS}/Beam.webp`, description: "H and I beams from surplus stock and dismantled structures." },
+  { name: "Carbon Steel", image: `${MS}/Carbon-Steel.webp`, description: "Carbon steel sections, plate and scrap." },
+  { name: "Coil", image: `${MS}/Coil.webp`, description: "Steel and stainless coils, surplus or secondary grade." },
+  { name: "MS Pipes", image: `${MS}/MS-Pipes.webp`, description: "Mild steel pipes in a range of diameters and lengths." },
+  { name: "Seamless Pipe", image: `${MS}/Seamless-Pipe.webp`, description: "Surplus seamless pipe from oil, gas and process projects." },
+  { name: "Seamless Plate", image: `${MS}/Seamless-Plate.webp`, description: "Surplus steel plate from fabrication and project stock." },
+];
+
+/** Homepage "Main activities": used and unused ferrous and non-ferrous metals we buy and sell. */
+export const materials: string[] = [
+  "Copper", "Aluminium", "Brass", "Nickel", "Zinc", "Heavy metal scrap (HMS)", "Old scaffolding",
+  "Scaffolding clamps (MS)", "Pipes", "Plates", "H beams", "I beams", "Angles", "C channels",
+  "Electric poles", "Used rail plates", "Heavy machinery", "Transformers", "Generators", "Shale plates",
+  "Containers", "Used porta cabins", "Hot-rolled stainless steel", "Ferrous scrap", "Shredded steel scrap",
+  "Steel tube", "Steel pipe", "SS tube", "SS coils", "SS sheets", "SS bright bars", "SS hexagonal bars",
+  "SS square bars", "SS billets", "SS waste & scrap", "Rail wheels", "Destroyed steel cars",
+  "Broken machinery casts", "Bushing shredded scrap",
+];

@@ -32,6 +32,29 @@ export const en = {
     label: "Breadcrumb",
     home: "Home",
   },
+  cta: {
+    title: "Get a quote today",
+    text: "Tell us what you have or what you need. We reply fast on WhatsApp and phone.",
+    whatsappText: "Hi Rayanco, I'd like a quote.",
+    sellScrap: "Sell us your scrap",
+    browseEquipment: "Browse used equipment",
+  },
+  form: {
+    name: "Your name",
+    phone: "Phone / WhatsApp",
+    email: "Email (optional)",
+    company: "Company (optional)",
+    location: "Location (city or site)",
+    items: "What are you selling?",
+    message: "Message",
+    submit: "Send",
+    sending: "Sending…",
+    success: "Thank you. We received your message and will contact you shortly.",
+    error: "Sorry, something went wrong. Please try again or contact us on WhatsApp.",
+    required: "This field is required",
+    invalidPhone: "Enter a valid phone number",
+    invalidEmail: "Enter a valid email",
+  },
 } as const;
 
 export type Dictionary = typeof en;
