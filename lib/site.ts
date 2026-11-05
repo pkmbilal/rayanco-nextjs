@@ -41,6 +41,29 @@ export const certifications = [
   { name: "BMR", src: "/assets/images/bmr.webp" },
 ] as const;
 
+/** Client logos (all 250×100 WebP, legacy paths). */
+export const clients = [
+  { name: "AGC", src: "/assets/images/AGC.webp" },
+  { name: "Al-Sale", src: "/assets/images/AL-SALE.webp" },
+  { name: "Alkhorayf", src: "/assets/images/ALKHORAYF.webp" },
+  { name: "Amiantit", src: "/assets/images/AMIANTIT.webp" },
+  { name: "Aramco", src: "/assets/images/ARAMCO.webp" },
+  { name: "Astaldi", src: "/assets/images/ASTALDI.webp" },
+  { name: "Daewoo", src: "/assets/images/DAEWOO.webp" },
+  { name: "GS", src: "/assets/images/GS.webp" },
+  { name: "SABIC", src: "/assets/images/SABIC.webp" },
+  { name: "Saipem", src: "/assets/images/SAIPAM.webp" },
+  { name: "SKEC", src: "/assets/images/SkEc.webp" },
+  { name: "Technip", src: "/assets/images/TECHNIP.webp" },
+  { name: "Técnicas Reunidas", src: "/assets/images/TR.webp" },
+] as const;
+
+/** Single-line postal address, identical everywhere (NAP). */
+export function fullAddress(): string {
+  const a = site.address;
+  return `${site.name}, ${a.poBox}, ${a.city} ${a.postalCode}, ${a.street}, ${a.country}`;
+}
+
 /** Builds a wa.me link. Falls back to the first sales phone until the owner confirms a WhatsApp number. */
 export function whatsappUrl(text?: string): string {
   // TODO(owner): confirm NEXT_PUBLIC_WHATSAPP_NUMBER; fallback is the first sales line.
