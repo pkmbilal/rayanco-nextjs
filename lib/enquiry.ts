@@ -20,6 +20,17 @@ export const enquirySchema = z.object({
 
 export type EnquiryInput = z.infer<typeof enquirySchema>;
 
+/** Enquiry about one listing (listing page form). */
+export const listingEnquirySchema = z.object({
+  listingId: z.uuid(),
+  name: enquirySchema.shape.name,
+  phone: enquirySchema.shape.phone,
+  message: z.string().trim().max(2500).optional(),
+  website: enquirySchema.shape.website,
+});
+
+export type ListingEnquiryInput = z.infer<typeof listingEnquirySchema>;
+
 export type EnquiryResult = { ok: true } | { ok: false };
 
 /** Folds the optional fields into the single `message` column (the enquiries table has no extra columns). */

@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next";
 import { absoluteUrl } from "@/lib/jsonld";
+import { categoryPath, listingPath } from "@/lib/listings/format";
+import { getCategories, getPublicListingPaths } from "@/lib/listings/queries";
 
 type Entry = MetadataRoute.Sitemap[number];
 
@@ -15,12 +17,35 @@ const staticRoutes: { path: string; priority: number; changeFrequency: Entry["ch
   { path: "/contact", priority: 0.6, changeFrequency: "yearly" },
 ];
 
-/**
- * Category and listing URLs. Filled in step 5 together with those pages, so the sitemap
- * never lists a URL that 404s. Use createPublicClient() + "use cache" + cacheTag("sitemap").
- */
+/** Category pages and every public listing (available, reserved and sold all stay live). */
 async function dynamicEntries(): Promise<MetadataRoute.Sitemap> {
-  return [];
+  const [categories, listings] = await Promise.all([getCategories(), getPublicListingPaths()]);
+
+  // A category's lastModified is its newest listing change.
+  const latestByCategory = new Map<string, string>();
+  for (const l of listings) {
+    const prev = latestByCategory.get(l.category);
+    if (!prev || l.updated_at > prev) latestByCategory.set(l.category, l.updated_at);
+  }
+
+  const categoryEntries: MetadataRoute.Sitemap = categories.map((c) => {
+    const last = latestByCategory.get(c.slug);
+    return {
+      url: absoluteUrl(categoryPath(c.slug)),
+      ...(last ? { lastModified: new Date(last) } : {}),
+      changeFrequency: "weekly",
+      priority: 0.7,
+    };
+  });
+
+  const listingEntries: MetadataRoute.Sitemap = listings.map((l) => ({
+    url: absoluteUrl(listingPath(l.category, l.slug)),
+    lastModified: new Date(l.updated_at),
+    changeFrequency: "weekly",
+    priority: 0.6,
+  }));
+
+  return [...categoryEntries, ...listingEntries];
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
