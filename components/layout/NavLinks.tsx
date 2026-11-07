@@ -9,7 +9,7 @@ type Item = { href: string; label: string };
 export function NavLinks({ items }: { items: Item[] }) {
   const pathname = usePathname();
   return (
-    <ul className="flex items-center gap-1">
+    <ul className="flex items-center gap-1 xl:gap-3">
       {items.map((item) => {
         const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
         return (
@@ -17,8 +17,8 @@ export function NavLinks({ items }: { items: Item[] }) {
             <Link
               href={item.href}
               aria-current={active ? "page" : undefined}
-              className={`rounded-md px-3 py-2 text-sm font-semibold uppercase tracking-wide transition-colors ${
-                active ? "text-accent-500" : "text-steel-100 hover:text-white"
+              className={`px-2.5 py-2 font-ui text-[0.8rem] font-medium transition-colors ${
+                active ? "text-accent-400" : "text-white hover:text-accent-400"
               }`}
             >
               {item.label}

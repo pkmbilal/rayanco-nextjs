@@ -47,7 +47,7 @@ export default function DemolitionPage() {
           {steps.map((s, i) => (
             <li key={s.title} className="rounded-lg bg-steel-50 p-6">
               <span className="font-display text-4xl font-semibold text-accent-500">{String(i + 1).padStart(2, "0")}</span>
-              <h3 className="mt-2 font-display text-xl font-semibold uppercase">{s.title}</h3>
+              <h3 className="mt-2 font-display text-xl font-semibold">{s.title}</h3>
               <p className="mt-2 text-steel-600">{s.text}</p>
             </li>
           ))}

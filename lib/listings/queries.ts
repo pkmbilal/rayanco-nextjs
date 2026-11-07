@@ -198,6 +198,24 @@ export async function getSimilarListings(listing: { id: string; category: Catego
   return (data as unknown as CardRow[]).map(toCard);
 }
 
+/** Newest available/reserved listings for the home page "Latest stock" strip (sold ones excluded). */
+export async function getLatestListings(limit = 4): Promise<ListingCardData[]> {
+  "use cache";
+  cacheLife("hours");
+  cacheTag(CACHE_TAGS.listings);
+
+  const { data, error } = await createPublicClient()
+    .from("listings")
+    .select(`${CARD_COLUMNS}, categories!inner(slug, name_en), listing_images(${IMAGE_COLUMNS})`)
+    .in("status", ["available", "reserved"])
+    .order("sort_order", { referencedTable: "listing_images" })
+    .limit(1, { referencedTable: "listing_images" })
+    .order("published_at", { ascending: false, nullsFirst: false })
+    .limit(limit);
+  if (error) fail("getLatestListings", error);
+  return (data as unknown as CardRow[]).map(toCard);
+}
+
 /** Distinct locations of public listings, for the filter dropdown. */
 export async function getPublicLocations(): Promise<string[]> {
   "use cache";

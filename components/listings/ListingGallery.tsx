@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import { getDictionary } from "@/lib/i18n";
 
 export type GalleryImage = { src: string; thumb: string; width: number; height: number; alt: string };
@@ -10,14 +10,18 @@ export type GalleryImage = { src: string; thumb: string; width: number; height: 
  * Listing photos: swipeable scroll-snap track (mobile), thumbnail strip, and a native
  * <dialog> lightbox. Every image has fixed dimensions/aspect so nothing shifts on load.
  */
-export function ListingGallery({ images }: { images: GalleryImage[] }) {
+export function ListingGallery({ images, overlay }: { images: GalleryImage[]; overlay?: ReactNode }) {
   const t = getDictionary().listings;
   const trackRef = useRef<HTMLDivElement>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [index, setIndex] = useState(0);
 
   if (images.length === 0) {
-    return <div className="aspect-[4/3] rounded-lg bg-steel-100" />;
+    return (
+      <div className="relative aspect-[4/3] rounded-xl bg-steel-100">
+        {overlay}
+      </div>
+    );
   }
 
   function scrollTo(i: number) {
@@ -53,7 +57,7 @@ export function ListingGallery({ images }: { images: GalleryImage[] }) {
         <div
           ref={trackRef}
           onScroll={onScroll}
-          className="flex snap-x snap-mandatory overflow-x-auto rounded-lg bg-steel-100 [scrollbar-width:none]"
+          className="flex snap-x snap-mandatory overflow-x-auto rounded-xl bg-steel-100 shadow-[0_6px_18px_rgb(11_34_54/0.12)] [scrollbar-width:none]"
         >
           {images.map((img, i) => (
             <button
@@ -75,17 +79,18 @@ export function ListingGallery({ images }: { images: GalleryImage[] }) {
             </button>
           ))}
         </div>
+        {overlay}
         {images.length > 1 ? (
-          <p className="absolute bottom-3 end-3 rounded bg-steel-950/70 px-2 py-0.5 text-xs font-semibold text-white">
+          <p className="absolute bottom-3 end-3 rounded-full bg-steel-950/75 px-2.5 py-1 text-xs font-semibold text-white">
             {index + 1} / {images.length}
           </p>
         ) : null}
       </div>
 
       {images.length > 1 ? (
-        <ul className="mt-3 flex gap-2 overflow-x-auto pb-1">
+        <ul className="mt-2.5 grid auto-cols-[calc((100%-1.875rem)/4)] grid-flow-col gap-2.5 overflow-x-auto pb-1 [scrollbar-width:thin]">
           {images.map((img, i) => (
-            <li key={img.thumb} className="shrink-0">
+            <li key={img.thumb}>
               <button
                 type="button"
                 onClick={() => {
@@ -94,9 +99,9 @@ export function ListingGallery({ images }: { images: GalleryImage[] }) {
                 }}
                 aria-label={t.photo(i + 1, images.length)}
                 aria-current={i === index}
-                className={`relative block h-16 w-20 overflow-hidden rounded border-2 ${i === index ? "border-accent-500" : "border-transparent opacity-70 hover:opacity-100"}`}
+                className={`relative block aspect-[4/3] w-full overflow-hidden rounded-lg border-2 ${i === index ? "border-accent-500" : "border-transparent opacity-75 hover:opacity-100"}`}
               >
-                <Image src={img.thumb} alt="" fill sizes="80px" className="object-cover" />
+                <Image src={img.thumb} alt="" fill sizes="160px" className="object-cover" />
               </button>
             </li>
           ))}

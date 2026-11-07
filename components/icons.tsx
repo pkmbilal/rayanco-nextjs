@@ -55,6 +55,77 @@ export function MenuIcon(props: IconProps) {
   );
 }
 
+function Stroke({ children, ...props }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      {...props}
+    >
+      {children}
+    </svg>
+  );
+}
+
+/** Points to the inline end; flips in RTL. */
+export function ArrowIcon({ className = "", ...props }: IconProps) {
+  return (
+    <Stroke className={`rtl:-scale-x-100 ${className}`} strokeWidth={2.2} {...props}>
+      <path d="M5 12h14M13 6l6 6-6 6" />
+    </Stroke>
+  );
+}
+
+export function SearchIcon(props: IconProps) {
+  return (
+    <Stroke strokeWidth={2.2} {...props}>
+      <circle cx="11" cy="11" r="7" />
+      <path d="m20 20-3.5-3.5" />
+    </Stroke>
+  );
+}
+
+export function CalendarIcon(props: IconProps) {
+  return (
+    <Stroke {...props}>
+      <rect x="3" y="5" width="18" height="16" rx="2" />
+      <path d="M3 10h18M8 3v4M16 3v4" />
+    </Stroke>
+  );
+}
+
+export function FactoryIcon(props: IconProps) {
+  return (
+    <Stroke {...props}>
+      <path d="M3 21V10l6 4V10l6 4V6l6 3v12H3Z" />
+      <path d="M7 18h2M12 18h2M17 18h1" />
+    </Stroke>
+  );
+}
+
+export function GlobeIcon(props: IconProps) {
+  return (
+    <Stroke {...props}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" />
+    </Stroke>
+  );
+}
+
+export function ShieldCheckIcon(props: IconProps) {
+  return (
+    <Stroke {...props}>
+      <path d="M12 3 4.5 6v5.5c0 4.5 3.2 8.3 7.5 9.5 4.3-1.2 7.5-5 7.5-9.5V6L12 3Z" />
+      <path d="m8.5 12 2.5 2.5 4.5-5" />
+    </Stroke>
+  );
+}
+
 export function CloseIcon(props: IconProps) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true" {...props}>

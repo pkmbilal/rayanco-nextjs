@@ -1,3 +1,4 @@
+import { Heading } from "@/components/ui/Heading";
 import { getDictionary } from "@/lib/i18n";
 import { isIndexable } from "@/lib/env";
 import { hasActiveFilters, parseFilters } from "@/lib/listings/filters";
@@ -11,14 +12,16 @@ type Props = {
   basePath: string;
   /** Fixed category (category pages). */
   category?: string;
+  /** Results heading, e.g. the category name. */
+  heading?: string;
 };
 
 /**
- * Filters + results. Reads searchParams, so it must be rendered inside <Suspense>.
+ * Search card + filter sidebar + results. Reads searchParams, so it must be rendered inside <Suspense>.
  * Filtered / paginated URLs get a noindex robots meta (React hoists it into <head>);
  * Google applies the most restrictive robots directive on the page.
  */
-export async function MarketplaceResults({ searchParams, basePath, category }: Props) {
+export async function MarketplaceResults({ searchParams, basePath, category, heading }: Props) {
   const t = getDictionary().listings;
   const parsed = parseFilters(await searchParams);
   const filters = category ? { ...parsed, category } : parsed;
@@ -26,7 +29,7 @@ export async function MarketplaceResults({ searchParams, basePath, category }: P
 
   const [{ items, total, page, pageCount }, categories, locations] = await Promise.all([
     searchListings(filters),
-    category ? Promise.resolve(undefined) : getCategories(),
+    getCategories(),
     getPublicLocations(),
   ]);
 
@@ -40,14 +43,16 @@ export async function MarketplaceResults({ searchParams, basePath, category }: P
         key={JSON.stringify(urlFilters)}
         basePath={basePath}
         filters={urlFilters}
-        categories={categories?.map((c) => ({ slug: c.slug, name_en: c.name_en }))}
+        categories={categories.map((c) => ({ slug: c.slug, name_en: c.name_en }))}
+        currentCategory={category}
         locations={locations}
-      />
-      <p className="mb-4 mt-6 text-sm font-medium text-steel-500" aria-live="polite">
-        {t.results(total)}
-      </p>
-      <ListingGrid items={items} priorityCount={page === 1 ? 2 : 0} />
-      <Pagination basePath={basePath} filters={urlFilters} page={page} pageCount={pageCount} />
+      >
+        <Heading subtitle={<span aria-live="polite">{t.results(total)}</span>} className="mb-4">
+          {heading ?? t.allStock}
+        </Heading>
+        <ListingGrid items={items} priorityCount={page === 1 ? 2 : 0} columns={3} />
+        <Pagination basePath={basePath} filters={urlFilters} page={page} pageCount={pageCount} />
+      </ListingFilters>
     </>
   );
 }
@@ -55,11 +60,14 @@ export async function MarketplaceResults({ searchParams, basePath, category }: P
 export function ResultsSkeleton() {
   return (
     <div aria-hidden="true" className="animate-pulse">
-      <div className="h-14 rounded-lg bg-steel-100" />
-      <div className="mt-10 grid gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4">
-        {Array.from({ length: 4 }, (_, i) => (
-          <div key={i} className="aspect-[4/5] rounded-lg bg-steel-100" />
-        ))}
+      <div className="relative z-10 -mt-8 h-16 rounded-2xl bg-white shadow-float" />
+      <div className="grid gap-6 pt-7 lg:grid-cols-[250px_minmax(0,1fr)]">
+        <div className="hidden h-80 rounded-xl bg-steel-100 lg:block" />
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {Array.from({ length: 3 }, (_, i) => (
+            <div key={i} className="aspect-[4/5] rounded-md bg-steel-100" />
+          ))}
+        </div>
       </div>
     </div>
   );
