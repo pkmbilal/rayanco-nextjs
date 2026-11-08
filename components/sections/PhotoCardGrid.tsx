@@ -42,6 +42,9 @@ export function PhotoCardGrid({
           key={item.image}
           className={`group relative isolate flex flex-col justify-end overflow-hidden rounded-xl bg-steel-950 shadow-panel ring-1 ring-steel-900/10 motion-safe:transition motion-safe:duration-300 hover:-translate-y-1 hover:shadow-float ${
             compact ? "aspect-[3/4] sm:aspect-[4/5]" : "aspect-[4/3]"
+          } ${
+            // Odd last card in the 2-column mobile grid spans the row instead of leaving an empty slot.
+            compact && items.length % 2 === 1 && i === items.length - 1 ? "max-sm:col-span-2 max-sm:aspect-[16/9]" : ""
           }`}
         >
           <Image
