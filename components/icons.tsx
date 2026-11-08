@@ -180,6 +180,36 @@ export function GearIcon(props: IconProps) {
   );
 }
 
+export function TruckIcon(props: IconProps) {
+  return (
+    <Stroke {...props}>
+      <path d="M2.5 6.5h11v10h-11zM13.5 10h4l3 3.5v3h-7" />
+      <circle cx="6.5" cy="18" r="1.8" />
+      <circle cx="17" cy="18" r="1.8" />
+    </Stroke>
+  );
+}
+
+export function ScaleIcon(props: IconProps) {
+  return (
+    <Stroke {...props}>
+      <path d="M12 3v18M7 21h10M4 7h16" />
+      <path d="M6.5 7 3.5 14a3 3 0 0 0 6 0l-3-7ZM17.5 7l-3 7a3 3 0 0 0 6 0l-3-7Z" />
+    </Stroke>
+  );
+}
+
+export function SortIcon(props: IconProps) {
+  return (
+    <Stroke {...props}>
+      <rect x="3" y="4" width="7" height="7" rx="1" />
+      <rect x="14" y="4" width="7" height="7" rx="1" />
+      <rect x="3" y="15" width="7" height="5" rx="1" />
+      <rect x="14" y="15" width="7" height="5" rx="1" />
+    </Stroke>
+  );
+}
+
 export function CloseIcon(props: IconProps) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true" {...props}>

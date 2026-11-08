@@ -17,6 +17,7 @@ import {
 } from "@/components/icons";
 import { ListingGrid } from "@/components/listings/ListingGrid";
 import { AboutIntro } from "@/components/sections/AboutIntro";
+import { CertificationsBand } from "@/components/sections/CertificationsBand";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { LogoGrid } from "@/components/sections/LogoGrid";
 import { HERO_IMAGE } from "@/components/sections/PageHero";
@@ -29,7 +30,7 @@ import { getDictionary } from "@/lib/i18n";
 import { organizationJsonLd } from "@/lib/jsonld";
 import { getLatestListings } from "@/lib/listings/queries";
 import { pageMetadata } from "@/lib/seo";
-import { certifications, clients, whatsappUrl } from "@/lib/site";
+import { clients, whatsappUrl } from "@/lib/site";
 
 // Ranking content preserved from the legacy homepage (CLAUDE.md §6). Do not remove the title, H1 or core text.
 export const metadata = pageMetadata({
@@ -382,17 +383,7 @@ export default async function Home() {
       </Container>
 
       {/* Certifications */}
-      <Container className="py-10">
-        <div className="flex flex-col gap-4 rounded-lg bg-band px-6 py-5 sm:flex-row sm:items-center sm:gap-8">
-          <div className="shrink-0">
-            <h2 className="font-display text-lg font-bold">Certifications</h2>
-            <p className="mt-0.5 text-xs text-steel-700">Awarded and accredited by</p>
-          </div>
-          <div className="flex-1">
-            <LogoGrid logos={certifications} width={250} height={150} altSuffix=" certification" cols={5} tiles={false} />
-          </div>
-        </div>
-      </Container>
+      <CertificationsBand />
     </>
   );
 }
