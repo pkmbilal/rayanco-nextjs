@@ -192,6 +192,22 @@ export const metalScrapSurplus: CatalogItem[] = [
   { name: "Seamless Plate", image: `${MS}/Seamless-Plate.webp`, description: "Surplus steel plate from fabrication and project stock." },
 ];
 
+/** /products/metal-scrap-surplus grouped for display. All 6 legacy items, each in exactly one group. */
+export const metalScrapGroups: CatalogGroup[] = groupCatalog("metalScrapGroups", metalScrapSurplus, [
+  {
+    key: "structural-plate",
+    title: "Structural steel & plate",
+    intro: "H and I beams, carbon steel sections and plate from surplus stock and dismantled structures.",
+    names: ["Beam", "Carbon Steel", "Seamless Plate"],
+  },
+  {
+    key: "pipe-coil",
+    title: "Pipe & coil",
+    intro: "Mild steel and seamless pipe from oil, gas and process projects, plus steel and stainless coil.",
+    names: ["MS Pipes", "Seamless Pipe", "Coil"],
+  },
+]);
+
 export type MaterialGroupKey = "non-ferrous" | "ferrous-scrap" | "structural" | "stainless" | "equipment";
 
 /**
