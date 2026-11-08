@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Barlow_Condensed, Inter } from "next/font/google";
+import { Figtree, Outfit, Poppins } from "next/font/google";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { isIndexable, publicEnv } from "@/lib/env";
@@ -7,16 +7,23 @@ import { defaultLocale, getDictionary, getDirection } from "@/lib/i18n";
 import { site } from "@/lib/site";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
+const figtree = Figtree({
+  variable: "--font-figtree",
   subsets: ["latin"],
   display: "swap",
 });
 
-const barlowCondensed = Barlow_Condensed({
-  variable: "--font-barlow-condensed",
+const outfit = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  weight: ["600", "700"],
+  display: "swap",
+});
+
+const poppins = Poppins({
+  variable: "--font-poppins",
+  subsets: ["latin"],
+  weight: ["500", "600"],
   display: "swap",
 });
 
@@ -37,7 +44,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#121418",
+  themeColor: "#0d1e28",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -48,7 +55,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang={locale}
       dir={getDirection(locale)}
-      className={`${inter.variable} ${barlowCondensed.variable} h-full antialiased`}
+      className={`${figtree.variable} ${outfit.variable} ${poppins.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col font-sans">
         <a

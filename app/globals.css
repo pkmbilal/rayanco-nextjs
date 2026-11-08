@@ -1,40 +1,52 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-sans: var(--font-inter);
-  --font-display: var(--font-barlow-condensed);
+  --font-sans: var(--font-figtree);
+  --font-display: var(--font-outfit);
+  --font-ui: var(--font-poppins);
 }
 
+/*
+ * Palette from the Claude Design project "Rayanco Website Redesign":
+ * deep navy + industrial green. `steel-*` is the navy/neutral ramp,
+ * `accent-*` is the green (matches the RSTC logo).
+ */
 @theme {
-  /* Steel / charcoal neutrals */
-  --color-steel-50: #f5f6f7;
-  --color-steel-100: #e8eaed;
-  --color-steel-200: #d0d4d9;
-  --color-steel-300: #aab1ba;
-  --color-steel-400: #7e8792;
-  --color-steel-500: #5f6873;
-  --color-steel-600: #4a525c;
-  --color-steel-700: #3a4049;
-  --color-steel-800: #2a2f36;
-  --color-steel-900: #1c2026;
-  --color-steel-950: #121418;
+  --color-steel-50: #f4f6f7;
+  --color-steel-100: #e2e7eb;
+  --color-steel-200: #d3dae0;
+  --color-steel-300: #b9c0c6;
+  --color-steel-400: #8a949d;
+  --color-steel-500: #55606a;
+  --color-steel-600: #4a5560;
+  --color-steel-700: #1d3344;
+  --color-steel-800: #12293e;
+  --color-steel-900: #0b2236;
+  --color-steel-950: #0d1e28;
 
-  /* TODO(owner): confirm accent colour. Safety orange is a placeholder. */
-  --color-accent-50: #fff4ed;
-  --color-accent-100: #ffe5d3;
-  --color-accent-500: #f06a1d;
-  --color-accent-600: #d9560c;
-  --color-accent-700: #b4450a;
+  --color-page: #fdfefd;
+  --color-band: #f1f1f2;
 
-  --color-whatsapp: #1fa855;
-  --color-whatsapp-dark: #178a45;
+  --color-accent-50: #eafaf0;
+  --color-accent-100: #bfe9cf;
+  --color-accent-400: #4ade80;
+  --color-accent-500: #1f9d55;
+  --color-accent-600: #188a49;
+  --color-accent-700: #0a7a3e;
 
-  --color-success: #1f8a4c;
-  --color-warning: #b7791f;
+  --color-whatsapp: #1f9d55;
+  --color-whatsapp-dark: #188a49;
+
+  --color-success: #1fae5c;
+  --color-warning: #c27a12;
+
+  --shadow-card: 0 1px 5px rgb(0 0 0 / 0.13);
+  --shadow-panel: 0 6px 18px rgb(11 34 54 / 0.07);
+  --shadow-float: 0 8px 24px rgb(11 34 54 / 0.14);
 }
 
 body {
-  background: var(--color-white);
+  background: var(--color-page);
   color: var(--color-steel-900);
 }
 

@@ -9,7 +9,7 @@ import { listingEnquirySchema, type ListingEnquiryInput } from "@/lib/enquiry";
 import { getDictionary } from "@/lib/i18n";
 
 const inputClass =
-  "mt-1 block w-full rounded-md border border-steel-300 bg-white px-3 py-2.5 text-base text-steel-900 placeholder:text-steel-400 focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500/30";
+  "mt-1 block w-full rounded-full border-[1.5px] border-steel-100 bg-steel-50 px-4 py-2.5 text-base text-steel-900 placeholder:text-steel-400 focus:border-accent-500 focus:bg-white focus:outline-none sm:text-sm [&:is(textarea)]:resize-none [&:is(textarea)]:rounded-2xl";
 
 export function ListingEnquiryForm({ listingId, defaultMessage }: { listingId: string; defaultMessage: string }) {
   const t = getDictionary().form;
@@ -66,7 +66,7 @@ export function ListingEnquiryForm({ listingId, defaultMessage }: { listingId: s
         {t.message}
         <textarea className={inputClass} rows={3} {...register("message")} />
       </label>
-      <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
+      <Button type="submit" variant="dark" disabled={isSubmitting} className="w-full">
         {isSubmitting ? t.sending : t.submit}
       </Button>
       <p role="status" aria-live="polite" className="text-sm">

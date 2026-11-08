@@ -50,6 +50,75 @@ export const products: CatalogItem[] = [
   { name: "Wooden Boards", image: `${P}/Wooden_Boards.webp`, description: "Used scaffolding and timber boards from project sites." },
 ];
 
+export type ProductGroup = {
+  key: string;
+  title: string;
+  intro: string;
+  /** Deeper page for this group, if one exists. */
+  href?: string;
+  items: CatalogItem[];
+};
+
+const productGroupDefs: (Omit<ProductGroup, "items"> & { names: string[] })[] = [
+  {
+    key: "non-ferrous",
+    title: "Non-ferrous & copper scrap",
+    intro: "Copper, aluminium, brass and nickel grades, plus cables, radiators and batteries for metal recovery.",
+    href: "/products/non-ferrous-metals",
+    names: [
+      "Aluminium Scrap", "Brass Scrap", "Copper Berry Cable", "Granular Copper", "Nickel Scrap", "Radiators", "Cables",
+      "Auto Batteries Scrap",
+    ],
+  },
+  {
+    key: "ferrous-steel",
+    title: "Ferrous & structural steel",
+    intro: "Heavy melting and mixed ferrous scrap, billets and structural sections for steel producers and re-rollers.",
+    href: "/products/metal-scrap-surplus",
+    names: ["Ferrous Metal Scrap", "Billets", "Iron Beams", "Steel Plates", "Rebars", "Stainless Steel", "Light Poles"],
+  },
+  {
+    key: "pipes-fittings",
+    title: "Pipes & fittings",
+    intro: "Surplus and used pipe, fittings and fasteners from oil, gas, process and construction projects.",
+    href: "/products/metal-scrap-surplus",
+    names: ["Big Pipes", "CS Pipes", "Elbows", "Flanges", "Bolts & Screws"],
+  },
+  {
+    key: "scaffolding-site",
+    title: "Scaffolding & site materials",
+    intro: "Scaffolding components, fencing and site materials recovered from completed projects.",
+    names: ["Adjustable Base Jack", "Clamps", "Aluminium Ladders", "Wooden Boards", "Fence", "Fence Gate", "Fibre Glass"],
+  },
+  {
+    key: "equipment-cabins",
+    title: "Equipment, electrical & cabins",
+    intro: "Generators, panel boards, e-waste, containers and porta cabins for resale, parts or recycling.",
+    href: "/used-equipment",
+    names: ["Generators", "Panel Boards", "E-Waste", "Containers", "Office Portable Cabins"],
+  },
+];
+
+/** /products grouped for display. Every legacy item appears in exactly one group (checked at build time). */
+export const productGroups: ProductGroup[] = (() => {
+  const byName = new Map(products.map((p) => [p.name, p]));
+  const seen = new Set<string>();
+  const groups = productGroupDefs.map(({ names, ...g }) => ({
+    ...g,
+    items: names.map((n) => {
+      const item = byName.get(n);
+      if (!item || seen.has(n)) throw new Error(`productGroups: unknown or duplicate item "${n}"`);
+      seen.add(n);
+      return item;
+    }),
+  }));
+  if (seen.size !== products.length) {
+    const missing = products.filter((p) => !seen.has(p.name)).map((p) => p.name);
+    throw new Error(`productGroups: ungrouped items ${missing.join(", ")}`);
+  }
+  return groups;
+})();
+
 /** /products/non-ferrous-metals — 11 items. */
 export const nonFerrousMetals: CatalogItem[] = [
   { name: "Alloy Steel", image: `${NF}/Alloy_Steel.webp`, description: "Alloy steel scrap and surplus, sorted by grade." },
@@ -65,6 +134,54 @@ export const nonFerrousMetals: CatalogItem[] = [
   { name: "Zinc", image: `${NF}/Zinc.webp`, description: "Zinc die-cast, sheet and dross." },
 ];
 
+export type CatalogGroup = { key: string; title: string; intro: string; items: CatalogItem[] };
+
+/** Groups `items` by name; throws at build time if any item is unknown, duplicated or left out. */
+function groupCatalog(
+  label: string,
+  items: CatalogItem[],
+  defs: { key: string; title: string; intro: string; names: string[] }[],
+): CatalogGroup[] {
+  const byName = new Map(items.map((p) => [p.name, p]));
+  const seen = new Set<string>();
+  const groups = defs.map(({ names, ...g }) => ({
+    ...g,
+    items: names.map((n) => {
+      const item = byName.get(n);
+      if (!item || seen.has(n)) throw new Error(`${label}: unknown or duplicate item "${n}"`);
+      seen.add(n);
+      return item;
+    }),
+  }));
+  if (seen.size !== items.length) {
+    const missing = items.filter((p) => !seen.has(p.name)).map((p) => p.name);
+    throw new Error(`${label}: ungrouped items ${missing.join(", ")}`);
+  }
+  return groups;
+}
+
+/** /products/non-ferrous-metals grouped for display. All 11 legacy items, each in exactly one group. */
+export const nonFerrousGroups: CatalogGroup[] = groupCatalog("nonFerrousGroups", nonFerrousMetals, [
+  {
+    key: "copper-alloys",
+    title: "Copper & copper alloys",
+    intro: "Copper wire, tube and cable, plus brass and bronze fittings, valves, bearings and turnings.",
+    names: ["Copper", "Brass", "Bronze"],
+  },
+  {
+    key: "aluminium-base-metals",
+    title: "Aluminium & base metals",
+    intro: "Aluminium including zorba, extrusions and cast, plus zinc, lead and tin scrap.",
+    names: ["Aluminium", "Zinc", "Lead", "Tin"],
+  },
+  {
+    key: "specialty-steels",
+    title: "Stainless & specialty steels",
+    intro: "Stainless, alloy and tool steel sorted by grade, and galvanized steel sheet and structures.",
+    names: ["Stainless Steel", "Alloy Steel", "Tool Steel", "Galvanized Steel"],
+  },
+]);
+
 /** /products/metal-scrap-surplus — 6 items. */
 export const metalScrapSurplus: CatalogItem[] = [
   { name: "Beam", image: `${MS}/Beam.webp`, description: "H and I beams from surplus stock and dismantled structures." },
@@ -75,15 +192,52 @@ export const metalScrapSurplus: CatalogItem[] = [
   { name: "Seamless Plate", image: `${MS}/Seamless-Plate.webp`, description: "Surplus steel plate from fabrication and project stock." },
 ];
 
-/** Homepage "Main activities": used and unused ferrous and non-ferrous metals we buy and sell. */
-export const materials: string[] = [
-  "Copper", "Aluminium", "Brass", "Nickel", "Zinc", "Heavy metal scrap (HMS)", "Old scaffolding",
-  "Scaffolding clamps (MS)", "Pipes", "Plates", "H beams", "I beams", "Angles", "C channels",
-  "Electric poles", "Used rail plates", "Heavy machinery", "Transformers", "Generators", "Shale plates",
-  "Containers", "Used porta cabins", "Hot-rolled stainless steel", "Ferrous scrap", "Shredded steel scrap",
-  "Steel tube", "Steel pipe", "SS tube", "SS coils", "SS sheets", "SS bright bars", "SS hexagonal bars",
-  "SS square bars", "SS billets", "SS waste & scrap", "Rail wheels", "Destroyed steel cars",
-  "Broken machinery casts", "Bushing shredded scrap",
+export type MaterialGroupKey = "non-ferrous" | "ferrous-scrap" | "structural" | "stainless" | "equipment";
+
+/**
+ * Homepage "Main activities": used and unused ferrous and non-ferrous metals we buy and sell.
+ * All 39 legacy items (CLAUDE.md §6 ranking content), grouped for display. Do not drop items.
+ */
+export const materialGroups: { key: MaterialGroupKey; title: string; href: string; items: string[] }[] = [
+  {
+    key: "non-ferrous",
+    title: "Non-ferrous metals",
+    href: "/products/non-ferrous-metals",
+    items: ["Copper", "Aluminium", "Brass", "Nickel", "Zinc"],
+  },
+  {
+    key: "ferrous-scrap",
+    title: "Ferrous scrap",
+    href: "/products",
+    items: [
+      "Heavy metal scrap (HMS)", "Ferrous scrap", "Shredded steel scrap", "Bushing shredded scrap",
+      "Destroyed steel cars", "Broken machinery casts",
+    ],
+  },
+  {
+    key: "stainless",
+    title: "Stainless steel",
+    href: "/products",
+    items: [
+      "Hot-rolled stainless steel", "SS tube", "SS coils", "SS sheets", "SS bright bars", "SS hexagonal bars",
+      "SS square bars", "SS billets", "SS waste & scrap",
+    ],
+  },
+  {
+    key: "structural",
+    title: "Structural steel & rail",
+    href: "/products/metal-scrap-surplus",
+    items: [
+      "H beams", "I beams", "Angles", "C channels", "Pipes", "Plates", "Shale plates", "Steel tube", "Steel pipe",
+      "Electric poles", "Used rail plates", "Rail wheels", "Old scaffolding", "Scaffolding clamps (MS)",
+    ],
+  },
+  {
+    key: "equipment",
+    title: "Equipment & surplus",
+    href: "/used-equipment",
+    items: ["Heavy machinery", "Transformers", "Generators", "Containers", "Used porta cabins"],
+  },
 ];
 
 const EQ = "/assets/images/Equipment_Resale";

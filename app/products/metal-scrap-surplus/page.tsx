@@ -1,3 +1,4 @@
+import { CertificationsBand } from "@/components/sections/CertificationsBand";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { ItemGrid } from "@/components/sections/ItemGrid";
 import { PageHero } from "@/components/sections/PageHero";
@@ -31,7 +32,8 @@ export default function MetalScrapSurplusPage() {
         <h2 className="sr-only">Surplus materials in stock</h2>
         <ItemGrid items={metalScrapSurplus} />
       </Section>
-      <CtaBand whatsappText="Hi Rayanco, I'm interested in your surplus materials." />
+      <CertificationsBand className="pb-10 sm:pb-12" />
+      <CtaBand flushTop whatsappText="Hi Rayanco, I'm interested in your surplus materials." />
     </>
   );
 }

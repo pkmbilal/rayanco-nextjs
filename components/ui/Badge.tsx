@@ -5,14 +5,14 @@ export type PublicStatus = "available" | "reserved" | "sold";
 const styles: Record<PublicStatus, string> = {
   available: "bg-success text-white",
   reserved: "bg-warning text-white",
-  sold: "bg-steel-800 text-white",
+  sold: "bg-steel-900 text-white",
 };
 
 export function StatusBadge({ status, className = "" }: { status: PublicStatus; className?: string }) {
   const t = getDictionary();
   return (
     <span
-      className={`inline-flex items-center rounded px-2 py-0.5 text-xs font-bold uppercase tracking-wide ${styles[status]} ${className}`}
+      className={`inline-flex items-center rounded-full px-2.5 py-1 text-[0.68rem] font-bold leading-none ${styles[status]} ${className}`}
     >
       {t.status[status]}
     </span>

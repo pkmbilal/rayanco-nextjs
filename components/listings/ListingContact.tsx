@@ -42,24 +42,24 @@ export function ListingContact({ listingId, whatsappHref, phone, shareUrl, share
   }
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-2.5">
       <a
         href={whatsappHref}
         target="_blank"
         rel="noopener noreferrer"
         onClick={() => log("whatsapp_click")}
-        className={buttonClasses({ variant: "whatsapp", size: "lg", className: "w-full" })}
+        className={buttonClasses({ variant: "primary", size: "lg", className: "w-full" })}
       >
         <WhatsAppIcon className="size-5" />
         {t.whatsapp}
       </a>
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-2.5">
         <a
           href={`tel:${phone.tel}`}
           onClick={() => log("call_click")}
           className={buttonClasses({ variant: "secondary", size: "md", className: "w-full text-steel-900" })}
         >
-          <PhoneIcon className="size-5" />
+          <PhoneIcon className="size-4 text-accent-500" />
           {t.call}
         </a>
         <button
@@ -70,7 +70,7 @@ export function ListingContact({ listingId, whatsappHref, phone, shareUrl, share
           {copied ? t.copied : t.share}
         </button>
       </div>
-      <p className="text-center text-sm text-steel-500" dir="ltr">
+      <p className="text-center text-xs text-steel-500" dir="ltr">
         {phone.display}
       </p>
     </div>

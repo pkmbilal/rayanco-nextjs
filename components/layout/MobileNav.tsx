@@ -44,7 +44,7 @@ export function MobileNav({ items, whatsappHref, labels }: MobileNavProps) {
         aria-controls="mobile-nav"
         aria-label={open ? labels.close : labels.open}
         onClick={() => setOpen((v) => !v)}
-        className="-me-2 inline-flex size-11 items-center justify-center rounded-md text-steel-50 hover:bg-white/10"
+        className="-me-2 inline-flex size-11 items-center justify-center rounded-full text-white hover:bg-white/10"
       >
         {open ? <CloseIcon className="size-6" /> : <MenuIcon className="size-6" />}
       </button>
@@ -52,7 +52,7 @@ export function MobileNav({ items, whatsappHref, labels }: MobileNavProps) {
       {open ? (
         <div
           id="mobile-nav"
-          className="fixed inset-x-0 top-16 bottom-0 z-40 overflow-y-auto border-t border-white/10 bg-steel-950 px-4 pb-8 pt-4"
+          className="fixed inset-x-0 top-16 bottom-0 sm:top-[4.5rem] z-40 overflow-y-auto border-t border-white/10 bg-steel-950 px-4 pb-8 pt-4"
         >
           <nav>
             <ul className="divide-y divide-white/10">
@@ -63,8 +63,8 @@ export function MobileNav({ items, whatsappHref, labels }: MobileNavProps) {
                     <Link
                       href={item.href}
                       aria-current={active ? "page" : undefined}
-                      className={`block py-4 font-display text-xl font-semibold uppercase tracking-wide ${
-                        active ? "text-accent-500" : "text-steel-50"
+                      className={`block py-4 font-display text-xl font-semibold ${
+                        active ? "text-accent-400" : "text-white"
                       }`}
                     >
                       {item.label}

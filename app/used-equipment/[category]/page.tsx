@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import { MarketplaceResults, ResultsSkeleton } from "@/components/listings/MarketplaceResults";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { PageHero } from "@/components/sections/PageHero";
-import { Section } from "@/components/ui/Section";
+import { Container } from "@/components/ui/Container";
 import { CATALOG_IMAGE_SIZE, equipmentTypes } from "@/content/catalog";
 import { categoryPath } from "@/lib/listings/format";
 import { getCategories, getCategoryBySlug } from "@/lib/listings/queries";
@@ -58,24 +58,26 @@ export default async function CategoryPage({ params, searchParams }: PageProps<"
     <>
       <PageHero
         title={`Used ${c.name_en} for Sale`}
+        accent={c.name_en}
         eyebrow="Used equipment"
         crumbs={[
           { name: "Used Equipment", href: "/used-equipment" },
           { name: c.name_en, href: path },
         ]}
+        overlap
       >
         {copy.intro ? <p>{copy.intro}</p> : null}
-        <p className="mt-3 text-base">
+        <p className="mt-2 text-sm text-white/80">
           Rayanco buys and resells used {c.name_en.toLowerCase()} across Saudi Arabia from our yards in Dammam and
           Jubail. Contact us on WhatsApp or phone for photos, inspection and the best price.
         </p>
       </PageHero>
 
-      <Section className="!pt-8 sm:!pt-10">
+      <Container>
         <Suspense fallback={<ResultsSkeleton />}>
-          <MarketplaceResults searchParams={searchParams} basePath={path} category={c.slug} />
+          <MarketplaceResults searchParams={searchParams} basePath={path} category={c.slug} heading={c.name_en} />
         </Suspense>
-      </Section>
+      </Container>
 
       <CtaBand
         title={`Need a specific ${c.name_en.toLowerCase().replace(/s$/, "")}?`}
