@@ -1,3 +1,4 @@
+import { CertificationsBand } from "@/components/sections/CertificationsBand";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { ItemGrid } from "@/components/sections/ItemGrid";
 import { PageHero } from "@/components/sections/PageHero";
@@ -31,6 +32,7 @@ export default function NonFerrousPage() {
         <h2 className="sr-only">Non-ferrous metals we trade</h2>
         <ItemGrid items={nonFerrousMetals} />
       </Section>
+      <CertificationsBand className="pb-10 sm:pb-12" />
       <CtaBand flushTop whatsappText="Hi Rayanco, I'd like a quote for non-ferrous metal." />
     </>
   );

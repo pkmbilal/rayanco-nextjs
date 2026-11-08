@@ -50,6 +50,75 @@ export const products: CatalogItem[] = [
   { name: "Wooden Boards", image: `${P}/Wooden_Boards.webp`, description: "Used scaffolding and timber boards from project sites." },
 ];
 
+export type ProductGroup = {
+  key: string;
+  title: string;
+  intro: string;
+  /** Deeper page for this group, if one exists. */
+  href?: string;
+  items: CatalogItem[];
+};
+
+const productGroupDefs: (Omit<ProductGroup, "items"> & { names: string[] })[] = [
+  {
+    key: "non-ferrous",
+    title: "Non-ferrous & copper scrap",
+    intro: "Copper, aluminium, brass and nickel grades, plus cables, radiators and batteries for metal recovery.",
+    href: "/products/non-ferrous-metals",
+    names: [
+      "Aluminium Scrap", "Brass Scrap", "Copper Berry Cable", "Granular Copper", "Nickel Scrap", "Radiators", "Cables",
+      "Auto Batteries Scrap",
+    ],
+  },
+  {
+    key: "ferrous-steel",
+    title: "Ferrous & structural steel",
+    intro: "Heavy melting and mixed ferrous scrap, billets and structural sections for steel producers and re-rollers.",
+    href: "/products/metal-scrap-surplus",
+    names: ["Ferrous Metal Scrap", "Billets", "Iron Beams", "Steel Plates", "Rebars", "Stainless Steel", "Light Poles"],
+  },
+  {
+    key: "pipes-fittings",
+    title: "Pipes & fittings",
+    intro: "Surplus and used pipe, fittings and fasteners from oil, gas, process and construction projects.",
+    href: "/products/metal-scrap-surplus",
+    names: ["Big Pipes", "CS Pipes", "Elbows", "Flanges", "Bolts & Screws"],
+  },
+  {
+    key: "scaffolding-site",
+    title: "Scaffolding & site materials",
+    intro: "Scaffolding components, fencing and site materials recovered from completed projects.",
+    names: ["Adjustable Base Jack", "Clamps", "Aluminium Ladders", "Wooden Boards", "Fence", "Fence Gate", "Fibre Glass"],
+  },
+  {
+    key: "equipment-cabins",
+    title: "Equipment, electrical & cabins",
+    intro: "Generators, panel boards, e-waste, containers and porta cabins for resale, parts or recycling.",
+    href: "/used-equipment",
+    names: ["Generators", "Panel Boards", "E-Waste", "Containers", "Office Portable Cabins"],
+  },
+];
+
+/** /products grouped for display. Every legacy item appears in exactly one group (checked at build time). */
+export const productGroups: ProductGroup[] = (() => {
+  const byName = new Map(products.map((p) => [p.name, p]));
+  const seen = new Set<string>();
+  const groups = productGroupDefs.map(({ names, ...g }) => ({
+    ...g,
+    items: names.map((n) => {
+      const item = byName.get(n);
+      if (!item || seen.has(n)) throw new Error(`productGroups: unknown or duplicate item "${n}"`);
+      seen.add(n);
+      return item;
+    }),
+  }));
+  if (seen.size !== products.length) {
+    const missing = products.filter((p) => !seen.has(p.name)).map((p) => p.name);
+    throw new Error(`productGroups: ungrouped items ${missing.join(", ")}`);
+  }
+  return groups;
+})();
+
 /** /products/non-ferrous-metals — 11 items. */
 export const nonFerrousMetals: CatalogItem[] = [
   { name: "Alloy Steel", image: `${NF}/Alloy_Steel.webp`, description: "Alloy steel scrap and surplus, sorted by grade." },
