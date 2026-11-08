@@ -134,6 +134,54 @@ export const nonFerrousMetals: CatalogItem[] = [
   { name: "Zinc", image: `${NF}/Zinc.webp`, description: "Zinc die-cast, sheet and dross." },
 ];
 
+export type CatalogGroup = { key: string; title: string; intro: string; items: CatalogItem[] };
+
+/** Groups `items` by name; throws at build time if any item is unknown, duplicated or left out. */
+function groupCatalog(
+  label: string,
+  items: CatalogItem[],
+  defs: { key: string; title: string; intro: string; names: string[] }[],
+): CatalogGroup[] {
+  const byName = new Map(items.map((p) => [p.name, p]));
+  const seen = new Set<string>();
+  const groups = defs.map(({ names, ...g }) => ({
+    ...g,
+    items: names.map((n) => {
+      const item = byName.get(n);
+      if (!item || seen.has(n)) throw new Error(`${label}: unknown or duplicate item "${n}"`);
+      seen.add(n);
+      return item;
+    }),
+  }));
+  if (seen.size !== items.length) {
+    const missing = items.filter((p) => !seen.has(p.name)).map((p) => p.name);
+    throw new Error(`${label}: ungrouped items ${missing.join(", ")}`);
+  }
+  return groups;
+}
+
+/** /products/non-ferrous-metals grouped for display. All 11 legacy items, each in exactly one group. */
+export const nonFerrousGroups: CatalogGroup[] = groupCatalog("nonFerrousGroups", nonFerrousMetals, [
+  {
+    key: "copper-alloys",
+    title: "Copper & copper alloys",
+    intro: "Copper wire, tube and cable, plus brass and bronze fittings, valves, bearings and turnings.",
+    names: ["Copper", "Brass", "Bronze"],
+  },
+  {
+    key: "aluminium-base-metals",
+    title: "Aluminium & base metals",
+    intro: "Aluminium including zorba, extrusions and cast, plus zinc, lead and tin scrap.",
+    names: ["Aluminium", "Zinc", "Lead", "Tin"],
+  },
+  {
+    key: "specialty-steels",
+    title: "Stainless & specialty steels",
+    intro: "Stainless, alloy and tool steel sorted by grade, and galvanized steel sheet and structures.",
+    names: ["Stainless Steel", "Alloy Steel", "Tool Steel", "Galvanized Steel"],
+  },
+]);
+
 /** /products/metal-scrap-surplus — 6 items. */
 export const metalScrapSurplus: CatalogItem[] = [
   { name: "Beam", image: `${MS}/Beam.webp`, description: "H and I beams from surplus stock and dismantled structures." },

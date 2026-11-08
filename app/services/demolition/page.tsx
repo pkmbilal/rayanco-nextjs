@@ -13,6 +13,7 @@ import { CertificationsBand } from "@/components/sections/CertificationsBand";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { LogoGrid } from "@/components/sections/LogoGrid";
 import { PageHero } from "@/components/sections/PageHero";
+import { PhotoCardGrid } from "@/components/sections/PhotoCardGrid";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Container } from "@/components/ui/Container";
 import { Heading } from "@/components/ui/Heading";
@@ -249,40 +250,7 @@ export default function DemolitionPage() {
           >
             <span id="scope-title">What we dismantle</span>
           </Heading>
-          <ul className="grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
-            {scope.map((item, i) => (
-              <li
-                key={item.image}
-                className="group relative isolate flex aspect-[4/3] flex-col justify-end overflow-hidden rounded-xl bg-steel-950 shadow-panel ring-1 ring-steel-900/10 motion-safe:transition motion-safe:duration-300 hover:-translate-y-1 hover:shadow-float"
-              >
-                <Image
-                  src={item.image}
-                  alt={item.name}
-                  fill
-                  sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw"
-                  className="-z-20 object-cover motion-safe:transition-transform motion-safe:duration-700 group-hover:scale-110"
-                />
-                <div
-                  aria-hidden="true"
-                  className="absolute inset-0 -z-10 bg-gradient-to-t from-steel-950 from-5% via-steel-950/55 via-45% to-transparent"
-                />
-                <span
-                  aria-hidden="true"
-                  className="absolute start-4 top-4 inline-flex h-7 items-center rounded-full bg-steel-950/55 px-2.5 font-display text-xs font-bold tabular-nums text-white ring-1 ring-white/20 backdrop-blur-sm"
-                >
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <div className="p-5 sm:p-6">
-                  <span
-                    aria-hidden="true"
-                    className="mb-3 block h-1 w-8 rounded-full bg-accent-400 motion-safe:transition-all motion-safe:duration-300 group-hover:w-14"
-                  />
-                  <h3 className="font-display text-lg font-semibold leading-snug text-white">{item.name}</h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-white/75">{item.description}</p>
-                </div>
-              </li>
-            ))}
-          </ul>
+          <PhotoCardGrid items={scope} numbered />
         </Container>
       </section>
 
