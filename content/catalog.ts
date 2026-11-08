@@ -75,15 +75,52 @@ export const metalScrapSurplus: CatalogItem[] = [
   { name: "Seamless Plate", image: `${MS}/Seamless-Plate.webp`, description: "Surplus steel plate from fabrication and project stock." },
 ];
 
-/** Homepage "Main activities": used and unused ferrous and non-ferrous metals we buy and sell. */
-export const materials: string[] = [
-  "Copper", "Aluminium", "Brass", "Nickel", "Zinc", "Heavy metal scrap (HMS)", "Old scaffolding",
-  "Scaffolding clamps (MS)", "Pipes", "Plates", "H beams", "I beams", "Angles", "C channels",
-  "Electric poles", "Used rail plates", "Heavy machinery", "Transformers", "Generators", "Shale plates",
-  "Containers", "Used porta cabins", "Hot-rolled stainless steel", "Ferrous scrap", "Shredded steel scrap",
-  "Steel tube", "Steel pipe", "SS tube", "SS coils", "SS sheets", "SS bright bars", "SS hexagonal bars",
-  "SS square bars", "SS billets", "SS waste & scrap", "Rail wheels", "Destroyed steel cars",
-  "Broken machinery casts", "Bushing shredded scrap",
+export type MaterialGroupKey = "non-ferrous" | "ferrous-scrap" | "structural" | "stainless" | "equipment";
+
+/**
+ * Homepage "Main activities": used and unused ferrous and non-ferrous metals we buy and sell.
+ * All 39 legacy items (CLAUDE.md §6 ranking content), grouped for display. Do not drop items.
+ */
+export const materialGroups: { key: MaterialGroupKey; title: string; href: string; items: string[] }[] = [
+  {
+    key: "non-ferrous",
+    title: "Non-ferrous metals",
+    href: "/products/non-ferrous-metals",
+    items: ["Copper", "Aluminium", "Brass", "Nickel", "Zinc"],
+  },
+  {
+    key: "ferrous-scrap",
+    title: "Ferrous scrap",
+    href: "/products",
+    items: [
+      "Heavy metal scrap (HMS)", "Ferrous scrap", "Shredded steel scrap", "Bushing shredded scrap",
+      "Destroyed steel cars", "Broken machinery casts",
+    ],
+  },
+  {
+    key: "stainless",
+    title: "Stainless steel",
+    href: "/products",
+    items: [
+      "Hot-rolled stainless steel", "SS tube", "SS coils", "SS sheets", "SS bright bars", "SS hexagonal bars",
+      "SS square bars", "SS billets", "SS waste & scrap",
+    ],
+  },
+  {
+    key: "structural",
+    title: "Structural steel & rail",
+    href: "/products/metal-scrap-surplus",
+    items: [
+      "H beams", "I beams", "Angles", "C channels", "Pipes", "Plates", "Shale plates", "Steel tube", "Steel pipe",
+      "Electric poles", "Used rail plates", "Rail wheels", "Old scaffolding", "Scaffolding clamps (MS)",
+    ],
+  },
+  {
+    key: "equipment",
+    title: "Equipment & surplus",
+    href: "/used-equipment",
+    items: ["Heavy machinery", "Transformers", "Generators", "Containers", "Used porta cabins"],
+  },
 ];
 
 const EQ = "/assets/images/Equipment_Resale";

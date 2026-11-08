@@ -126,6 +126,60 @@ export function ShieldCheckIcon(props: IconProps) {
   );
 }
 
+export function BeamIcon(props: IconProps) {
+  return (
+    <Stroke {...props}>
+      <path d="M5 4h14M5 20h14M12 4v16M8 4v2M16 4v2M8 18v2M16 18v2" />
+    </Stroke>
+  );
+}
+
+export function IngotIcon(props: IconProps) {
+  return (
+    <Stroke {...props}>
+      <path d="M2.5 20 4 15h7l1.5 5h-10ZM11.5 20 13 15h7l1.5 5h-10ZM7 15l1.5-5h7l1.5 5" />
+    </Stroke>
+  );
+}
+
+export function RecycleIcon(props: IconProps) {
+  return (
+    <Stroke {...props}>
+      <path d="M7 19H4.5a1.8 1.8 0 0 1-1.5-2.7L5.4 12M17 19h2.5a1.8 1.8 0 0 0 1.5-2.7L19.4 13M12 19h5m0 0-2-2m2 2-2 2" />
+      <path d="M8.6 5.3 10.4 2.6a1.8 1.8 0 0 1 3 0l3.7 6.1M14.3 9.6l2.8-.9.9 2.8M5.4 12l-.9-2.8M5.4 12l2.8-.9" />
+    </Stroke>
+  );
+}
+
+export function ShredderIcon(props: IconProps) {
+  return (
+    <Stroke {...props}>
+      <rect x="3" y="8" width="18" height="6" rx="1.5" />
+      <path d="M7 3v5M12 3v5M17 3v5M6 14v7M9 14v5M12 14v7M15 14v5M18 14v7" />
+    </Stroke>
+  );
+}
+
+export function CoilIcon(props: IconProps) {
+  return (
+    <Stroke {...props}>
+      <ellipse cx="8" cy="12" rx="4.5" ry="8" />
+      <ellipse cx="8" cy="12" rx="1.5" ry="3" />
+      <path d="M8 4h8c2.5 0 4.5 3.6 4.5 8s-2 8-4.5 8H8" />
+    </Stroke>
+  );
+}
+
+export function GearIcon(props: IconProps) {
+  return (
+    <Stroke {...props}>
+      <circle cx="12" cy="12" r="3" />
+      <path d="M12 2.5v3M12 18.5v3M21.5 12h-3M5.5 12h-3M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1M18.7 18.7l-2.1-2.1M7.4 7.4 5.3 5.3" />
+      <circle cx="12" cy="12" r="6.5" />
+    </Stroke>
+  );
+}
+
 export function CloseIcon(props: IconProps) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true" {...props}>

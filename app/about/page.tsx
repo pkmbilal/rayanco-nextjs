@@ -42,9 +42,11 @@ export default function AboutPage() {
           ))}
         </dl>
 
-        <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
-          <Heading>Our story</Heading>
-          <div className="space-y-4 text-lg text-steel-700">
+        <div className="grid gap-6 border-t border-steel-200 pt-5 lg:grid-cols-12 lg:gap-12">
+          <Heading rule={false} eyebrow="Since 1995" className="lg:col-span-6">
+            Our story
+          </Heading>
+          <div className="space-y-4 text-lg text-steel-700 lg:col-span-6 lg:pt-8">
             <p>
               Rayanco is one of the most reputed traders, suppliers, processors and recyclers of scrap for a number of
               companies in the steel industry in the Kingdom of Saudi Arabia. It is by far the largest trader of metal scrap
@@ -65,9 +67,11 @@ export default function AboutPage() {
       </Section>
 
       <Section tone="muted">
-        <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
-          <Heading eyebrow="Vision">Our vision</Heading>
-          <p className="text-lg text-steel-700">
+        <div className="grid gap-6 border-t border-steel-200 pt-5 lg:grid-cols-12 lg:gap-12">
+          <Heading rule={false} eyebrow="Vision" className="lg:col-span-6">
+            Our vision
+          </Heading>
+          <p className="text-lg text-steel-700 lg:col-span-6 lg:pt-8">
             As from the very beginning, our vision is to provide quality shredded material and other scrap metal products
             that meet our customers&apos; quality standards. We aim to be the top-of-mind metal processing and recycling
             company in the Gulf region.

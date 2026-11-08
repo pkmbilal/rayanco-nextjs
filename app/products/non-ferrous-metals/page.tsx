@@ -31,7 +31,7 @@ export default function NonFerrousPage() {
         <h2 className="sr-only">Non-ferrous metals we trade</h2>
         <ItemGrid items={nonFerrousMetals} />
       </Section>
-      <CtaBand whatsappText="Hi Rayanco, I'd like a quote for non-ferrous metal." />
+      <CtaBand flushTop whatsappText="Hi Rayanco, I'd like a quote for non-ferrous metal." />
     </>
   );
 }

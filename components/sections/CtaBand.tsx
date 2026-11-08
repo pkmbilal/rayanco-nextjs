@@ -11,19 +11,22 @@ export function CtaBand({
   accent,
   text,
   whatsappText,
+  flushTop = false,
 }: {
   title?: string;
   /** Trailing part of the title shown in green. */
   accent?: string;
   text?: string;
   whatsappText?: string;
+  /** Drop the top padding when the band directly follows a light `<Section>`, so the gap equals one section padding. */
+  flushTop?: boolean;
 }) {
   const t = getDictionary();
   const heading = title ?? t.cta.title;
   const green = accent ?? (title ? undefined : t.cta.titleAccent);
 
   return (
-    <Container className="py-10 sm:py-12">
+    <Container className={flushTop ? "pb-10 sm:pb-12" : "py-10 sm:py-12"}>
       <section className="relative isolate overflow-hidden rounded-lg bg-steel-800 text-white">
         <div className="absolute inset-y-0 end-0 -z-10 hidden w-[46%] md:block">
           <Image src="/assets/images/site/cta.webp" alt="" fill sizes="(min-width: 1280px) 560px, 46vw" className="object-cover object-right" />

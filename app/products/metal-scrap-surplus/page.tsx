@@ -31,7 +31,7 @@ export default function MetalScrapSurplusPage() {
         <h2 className="sr-only">Surplus materials in stock</h2>
         <ItemGrid items={metalScrapSurplus} />
       </Section>
-      <CtaBand whatsappText="Hi Rayanco, I'm interested in your surplus materials." />
+      <CtaBand flushTop whatsappText="Hi Rayanco, I'm interested in your surplus materials." />
     </>
   );
 }

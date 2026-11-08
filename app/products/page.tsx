@@ -45,7 +45,7 @@ export default function ProductsPage() {
         <ItemGrid items={products} />
       </Section>
 
-      <CtaBand title="Need a price?" text="Send us the material, grade and quantity and we will quote you quickly." />
+      <CtaBand flushTop title="Need a price?" text="Send us the material, grade and quantity and we will quote you quickly." />
     </>
   );
 }
