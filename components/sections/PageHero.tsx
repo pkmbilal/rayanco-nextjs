@@ -2,16 +2,18 @@ import Image from "next/image";
 import type { ReactNode } from "react";
 import { Breadcrumbs, type Crumb } from "@/components/ui/Breadcrumbs";
 import { Container } from "@/components/ui/Container";
+import type { Locale } from "@/lib/i18n";
 
 export const HERO_IMAGE = { src: "/assets/images/site/hero.webp", width: 968, height: 668 } as const;
 
 type PageHeroProps = {
+  locale: Locale;
   title: string;
   /** Part of the title to colour green (must appear in `title`). */
   accent?: string;
   /** Small pill above the H1. */
   eyebrow?: string;
-  /** Breadcrumb trail after Home; the last item is this page. */
+  /** Breadcrumb trail after Home (locale-free hrefs); the last item is this page. */
   crumbs: Crumb[];
   /** Extra bottom padding so a floating card can overlap the hero. */
   overlap?: boolean;
@@ -36,6 +38,7 @@ export function AccentTitle({ title, accent }: { title: string; accent?: string 
 
 /** Inner-page header: dark image band with breadcrumbs, the page's single H1 and an intro. */
 export function PageHero({
+  locale,
   title,
   accent,
   eyebrow,
@@ -60,7 +63,7 @@ export function PageHero({
         className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgb(13_30_40/0.94)_0%,rgb(13_30_40/0.8)_50%,rgb(13_30_40/0.55)_100%)] rtl:bg-[linear-gradient(270deg,rgb(13_30_40/0.94)_0%,rgb(13_30_40/0.8)_50%,rgb(13_30_40/0.55)_100%)]"
       />
       <Container className={`pt-6 sm:pt-8 ${overlap ? "pb-14 sm:pb-16" : "pb-10 sm:pb-12"}`}>
-        <Breadcrumbs items={crumbs} tone="dark" className="mb-4" />
+        <Breadcrumbs locale={locale} items={crumbs} tone="dark" className="mb-4" />
         {eyebrow ? (
           <p className="mb-3 inline-flex h-6 items-center rounded-full border border-accent-400/50 bg-accent-400/15 px-3 text-[0.65rem] font-bold uppercase tracking-wider text-accent-400">
             {eyebrow}

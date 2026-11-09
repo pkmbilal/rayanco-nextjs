@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { CloseIcon, MenuIcon, WhatsAppIcon } from "@/components/icons";
 import { buttonClasses } from "@/components/ui/Button";
 
-type Item = { href: string; label: string };
+type Item = { href: string; label: string; exact?: boolean };
 
 type MobileNavProps = {
   items: Item[];
@@ -57,7 +57,7 @@ export function MobileNav({ items, whatsappHref, labels }: MobileNavProps) {
           <nav>
             <ul className="divide-y divide-white/10">
               {items.map((item) => {
-                const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+                const active = item.exact ? pathname === item.href : pathname.startsWith(item.href);
                 return (
                   <li key={item.href}>
                     <Link

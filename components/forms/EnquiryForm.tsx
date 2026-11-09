@@ -6,15 +6,15 @@ import { useForm, type FieldError } from "react-hook-form";
 import { submitEnquiry } from "@/app/actions/enquiry";
 import { Button } from "@/components/ui/Button";
 import { enquirySchema, type EnquiryInput } from "@/lib/enquiry";
-import { getDictionary } from "@/lib/i18n";
+import { getDictionary, type Locale } from "@/lib/i18n";
 
 type Kind = EnquiryInput["kind"];
 
 const inputClass =
   "mt-1 block w-full rounded-full border-[1.5px] border-steel-100 bg-steel-50 px-4 py-2.5 text-base text-steel-900 placeholder:text-steel-400 focus:border-accent-500 focus:bg-white focus:outline-none sm:text-sm [&:is(textarea)]:resize-none [&:is(textarea)]:rounded-2xl";
 
-export function EnquiryForm({ kind }: { kind: Kind }) {
-  const t = getDictionary().form;
+export function EnquiryForm({ locale, kind }: { locale: Locale; kind: Kind }) {
+  const t = getDictionary(locale).form;
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const {
     register,
@@ -93,7 +93,7 @@ export function EnquiryForm({ kind }: { kind: Kind }) {
           <textarea
             className={inputClass}
             rows={3}
-            placeholder="e.g. 2 × 50-ton crawler cranes, 200 t HMS scrap, used generators"
+            placeholder={t.itemsPlaceholder}
             {...register("items")}
           />
         </label>

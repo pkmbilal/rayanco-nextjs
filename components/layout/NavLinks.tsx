@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-type Item = { href: string; label: string };
+type Item = { href: string; label: string; exact?: boolean };
 
 /** Desktop nav. Client-side only to highlight the active item. */
 export function NavLinks({ items }: { items: Item[] }) {
@@ -11,7 +11,7 @@ export function NavLinks({ items }: { items: Item[] }) {
   return (
     <ul className="flex items-center gap-1 xl:gap-3">
       {items.map((item) => {
-        const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+        const active = item.exact ? pathname === item.href : pathname.startsWith(item.href);
         return (
           <li key={item.href}>
             <Link

@@ -3,12 +3,21 @@ import Link from "next/link";
 import { WhatsAppIcon } from "@/components/icons";
 import { Container } from "@/components/ui/Container";
 import { buttonClasses } from "@/components/ui/Button";
-import { getDictionary } from "@/lib/i18n";
+import { getDictionary, localePath, type Locale } from "@/lib/i18n";
 import { mainNav, site, whatsappUrl } from "@/lib/site";
+import { LanguageSwitch } from "./LanguageSwitch";
 import { MobileNav } from "./MobileNav";
 import { NavLinks } from "./NavLinks";
 
-export function BrandMark({ eager = false, className = "" }: { eager?: boolean; className?: string }) {
+export function BrandMark({
+  tagline,
+  eager = false,
+  className = "",
+}: {
+  tagline: string;
+  eager?: boolean;
+  className?: string;
+}) {
   return (
     <span className={`flex items-center gap-2 text-white ${className}`}>
       <Image
@@ -21,15 +30,15 @@ export function BrandMark({ eager = false, className = "" }: { eager?: boolean; 
       />
       <span className="flex flex-col items-center leading-none">
         <span className="font-display text-xl font-bold tracking-tight sm:text-[1.45rem]">{site.name}</span>
-        <span className="mt-1 text-[0.6rem] text-white/85">Buy • Sell • Trade</span>
+        <span className="mt-1 text-[0.6rem] text-white/85">{tagline}</span>
       </span>
     </span>
   );
 }
 
-export function Header() {
-  const t = getDictionary();
-  const items = mainNav.map((n) => ({ href: n.href, label: t.nav[n.labelKey] }));
+export function Header({ locale }: { locale: Locale }) {
+  const t = getDictionary(locale);
+  const items = mainNav.map((n) => ({ href: localePath(locale, n.href), label: t.nav[n.labelKey], exact: n.href === "/" }));
   const waHref = whatsappUrl();
 
   // Solid bg on purpose: backdrop-filter would trap the fixed mobile drawer inside the header.
@@ -37,24 +46,21 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 bg-steel-950">
       <Container className="flex h-16 items-center justify-between gap-4 sm:h-[4.5rem]">
-        <Link href="/" className="shrink-0" aria-label={`${site.name} home`}>
-          <BrandMark eager />
+        <Link href={localePath(locale, "/")} className="shrink-0" aria-label={t.header.homeLabel}>
+          <BrandMark eager tagline={t.header.tagline} />
         </Link>
 
-        <nav aria-label="Main" className="hidden lg:block">
+        <nav aria-label={t.header.mainNav} className="hidden lg:block">
           <NavLinks items={items} />
         </nav>
 
         <div className="flex items-center gap-2">
-          {/* Arabic version ships in phase 2; placeholder only. */}
-          <span
-            title={t.header.switchLanguageSoon}
-            aria-disabled="true"
-            className="hidden cursor-not-allowed px-2 py-1 text-sm text-white/50 sm:inline"
-            lang="ar"
-          >
-            {t.header.switchLanguage}
-          </span>
+          <LanguageSwitch
+            locale={locale}
+            label={t.header.switchLanguage}
+            title={t.header.switchLanguageLabel}
+            className="inline-flex h-11 items-center px-2 font-ui text-sm font-medium text-white hover:text-accent-400"
+          />
           <a
             href={waHref}
             target="_blank"

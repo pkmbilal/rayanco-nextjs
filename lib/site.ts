@@ -1,5 +1,5 @@
 import { publicEnv } from "@/lib/env";
-import type { Dictionary } from "@/lib/i18n/en";
+import type { Dictionary, Locale } from "@/lib/i18n";
 
 /** Business facts. NAP must stay identical on every page (SEO). */
 export const site = {
@@ -58,8 +58,13 @@ export const clients = [
   { name: "Técnicas Reunidas", src: "/assets/images/TR.webp" },
 ] as const;
 
-/** Single-line postal address, identical everywhere (NAP). */
-export function fullAddress(): string {
+// TODO(owner): native review of the Arabic address wording (shown on /ar pages only).
+const addressAr =
+  "ريانكو، ص.ب 72146، الدمام 31518، طريق الملك فهد، شمال مقابل MMG، مركز الحمام التجاري، الطابق الأول، مكتب رقم 9، المملكة العربية السعودية";
+
+/** Single-line postal address, identical on every page of a locale (NAP). */
+export function fullAddress(locale: Locale): string {
+  if (locale === "ar") return addressAr;
   const a = site.address;
   return `${site.name}, ${a.poBox}, ${a.city} ${a.postalCode}, ${a.street}, ${a.country}`;
 }

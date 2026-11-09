@@ -1,10 +1,12 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { publicEnv } from "@/lib/env";
+import { localePath, splitLocale } from "@/lib/i18n";
 
 /**
  * Redirects for deleted / renamed / archived listings (CLAUDE.md §3.5, §9).
  * Rows in `public.redirects` are written by DB triggers, which already collapse chains,
  * so every hit is a single 301 hop. Lookups are cached in memory per instance.
+ * Rows store locale-free paths; /ar URLs are looked up without the prefix and redirected within /ar.
  */
 
 const TTL_MS = 5 * 60 * 1000;
@@ -42,16 +44,17 @@ async function lookup(path: string): Promise<string | null> {
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const path = pathname.length > 1 ? pathname.replace(/\/+$/, "") : pathname;
+  const trimmed = pathname.length > 1 ? pathname.replace(/\/+$/, "") : pathname;
+  const { locale, path } = splitLocale(trimmed);
   const to = await lookup(path);
   if (to && to !== path) {
     const target = request.nextUrl.clone();
-    target.pathname = to;
+    target.pathname = localePath(locale, to);
     return NextResponse.redirect(target, 301);
   }
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/used-equipment/:path+"],
+  matcher: ["/used-equipment/:path+", "/ar/used-equipment/:path+"],
 };

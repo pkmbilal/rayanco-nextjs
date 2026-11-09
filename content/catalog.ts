@@ -2,6 +2,9 @@
  * Product catalogue reproduced from the legacy site (content/legacy/*.md).
  * Image paths are unchanged so old image URLs keep ranking. All legacy images are 300×300 WebP.
  */
+import type { Locale } from "@/lib/i18n";
+import { groupsAr, itemsAr, materialGroupsAr } from "./catalog.ar";
+
 export type CatalogItem = {
   name: string;
   image: string;
@@ -279,3 +282,34 @@ export const equipmentTypes: (CatalogItem & { slug: string })[] = [
   { slug: "welding-machines", name: "Welding Machines", image: `${EQ}/Welding_Machines.webp`, description: "Engine-driven and electric welding machines." },
   { slug: "wheel-loaders", name: "Wheel Loaders", image: `${EQ}/Wheel_Loader.webp`, description: "Front-end wheel loaders for material handling." },
 ];
+
+/** Catalogue items in a locale. Throws at build time if an Arabic translation is missing. */
+export function localizeItems<T extends CatalogItem>(locale: Locale, items: T[]): T[] {
+  if (locale === "en") return items;
+  return items.map((item) => {
+    const tr = itemsAr[item.image];
+    if (!tr) throw new Error(`catalog.ar: missing Arabic text for ${item.image}`);
+    return { ...item, ...tr };
+  });
+}
+
+/** A catalogue group (title, intro and items) in a locale. */
+export function localizeGroup<G extends { key: string; title: string; intro: string; items: CatalogItem[] }>(
+  locale: Locale,
+  group: G,
+): G {
+  if (locale === "en") return group;
+  const tr = groupsAr[group.key];
+  if (!tr) throw new Error(`catalog.ar: missing Arabic text for group ${group.key}`);
+  return { ...group, ...tr, items: localizeItems(locale, group.items) };
+}
+
+/** Homepage materials list in a locale. */
+export function localizedMaterialGroups(locale: Locale): typeof materialGroups {
+  if (locale === "en") return materialGroups;
+  return materialGroups.map((g) => {
+    const tr = materialGroupsAr[g.key];
+    if (!tr || tr.items.length !== g.items.length) throw new Error(`catalog.ar: material group ${g.key} out of sync`);
+    return { ...g, ...tr };
+  });
+}

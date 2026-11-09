@@ -1,24 +1,24 @@
-import { getDictionary } from "@/lib/i18n";
-import { formatNumber } from "@/lib/listings/format";
+import { getDictionary, type Locale } from "@/lib/i18n";
+import { categoryName, formatNumber, listingLocation } from "@/lib/listings/format";
 import type { ListingDetail } from "@/lib/listings/queries";
 
 /**
  * Specs as real HTML (indexable): a description list laid out as key/value tiles.
  * Empty rows are skipped. Price is shown in its own panel above.
  */
-export function SpecTable({ listing }: { listing: ListingDetail }) {
-  const t = getDictionary().listings;
+export function SpecTable({ locale, listing }: { locale: Locale; listing: ListingDetail }) {
+  const t = getDictionary(locale).listings;
   const s = t.spec;
   const rows: [string, string | null][] = [
     [s.make, listing.make],
     [s.model, listing.model],
     [s.year, listing.year ? String(listing.year) : null],
     [s.condition, listing.condition ? t.conditions[listing.condition] : null],
-    [s.hoursOrKm, listing.hours_or_km != null ? formatNumber(listing.hours_or_km) : null],
+    [s.hoursOrKm, listing.hours_or_km != null ? formatNumber(locale, listing.hours_or_km) : null],
     [s.capacity, listing.capacity],
     [s.quantity, String(listing.quantity)],
-    [s.location, listing.location ? `${listing.location}, KSA` : null],
-    [s.category, listing.category.name_en],
+    [s.location, listing.location ? `${listingLocation(locale, listing.location)}, ${t.country}` : null],
+    [s.category, categoryName(locale, listing.category)],
     [s.ref, listing.ref_code],
   ];
 

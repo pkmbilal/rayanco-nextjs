@@ -1,5 +1,6 @@
 import { Heading } from "@/components/ui/Heading";
-import { getDictionary } from "@/lib/i18n";
+import { getDictionary, localePath, type Locale } from "@/lib/i18n";
+import { categoryName, listingLocation } from "@/lib/listings/format";
 import { isIndexable } from "@/lib/env";
 import { hasActiveFilters, parseFilters } from "@/lib/listings/filters";
 import { getCategories, getPublicLocations, searchListings } from "@/lib/listings/queries";
@@ -8,7 +9,9 @@ import { ListingGrid } from "./ListingGrid";
 import { Pagination } from "./Pagination";
 
 type Props = {
+  locale: Locale;
   searchParams: Promise<Record<string, string | string[] | undefined>>;
+  /** Locale-prefixed path the filters submit to. */
   basePath: string;
   /** Fixed category (category pages). */
   category?: string;
@@ -21,8 +24,8 @@ type Props = {
  * Filtered / paginated URLs get a noindex robots meta (React hoists it into <head>);
  * Google applies the most restrictive robots directive on the page.
  */
-export async function MarketplaceResults({ searchParams, basePath, category, heading }: Props) {
-  const t = getDictionary().listings;
+export async function MarketplaceResults({ locale, searchParams, basePath, category, heading }: Props) {
+  const t = getDictionary(locale).listings;
   const parsed = parseFilters(await searchParams);
   const filters = category ? { ...parsed, category } : parsed;
   const filtered = hasActiveFilters(filters, category ? ["category"] : []);
@@ -40,18 +43,21 @@ export async function MarketplaceResults({ searchParams, basePath, category, hea
     <>
       {filtered ? <meta name="robots" content={`noindex, ${isIndexable ? "follow" : "nofollow"}`} /> : null}
       <ListingFilters
+        locale={locale}
+        rootPath={localePath(locale, "/used-equipment")}
+        contactPath={localePath(locale, "/contact")}
         key={JSON.stringify(urlFilters)}
         basePath={basePath}
         filters={urlFilters}
-        categories={categories.map((c) => ({ slug: c.slug, name_en: c.name_en }))}
+        categories={categories.map((c) => ({ slug: c.slug, name: categoryName(locale, c) }))}
         currentCategory={category}
-        locations={locations}
+        locations={locations.map((l) => ({ value: l, label: listingLocation(locale, l) }))}
       >
         <Heading subtitle={<span aria-live="polite">{t.results(total)}</span>} className="mb-4">
           {heading ?? t.allStock}
         </Heading>
-        <ListingGrid items={items} priorityCount={page === 1 ? 2 : 0} columns={3} />
-        <Pagination basePath={basePath} filters={urlFilters} page={page} pageCount={pageCount} />
+        <ListingGrid locale={locale} items={items} priorityCount={page === 1 ? 2 : 0} columns={3} />
+        <Pagination locale={locale} basePath={basePath} filters={urlFilters} page={page} pageCount={pageCount} />
       </ListingFilters>
     </>
   );

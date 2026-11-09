@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { WhatsAppIcon } from "@/components/icons";
 import type { CatalogItem } from "@/content/catalog";
+import { getDictionary, type Locale } from "@/lib/i18n";
 import { whatsappUrl } from "@/lib/site";
 
 const COLS = {
@@ -15,12 +16,15 @@ const SIZES = {
 
 /** Full-bleed photo cards with a navy fade, accent bar, name and description. */
 export function PhotoCardGrid({
+  locale,
   items,
   columns = 3,
   numbered = false,
   quote = false,
   headingLevel = 3,
 }: {
+  locale: Locale;
+  /** Already localised (see `localizeItems`). */
   items: CatalogItem[];
   /** 3: one column on mobile, roomy cards. 4: two columns on mobile, compact cards. */
   columns?: 3 | 4;
@@ -30,6 +34,7 @@ export function PhotoCardGrid({
   quote?: boolean;
   headingLevel?: 2 | 3;
 }) {
+  const t = getDictionary(locale).photoCard;
   const Name = `h${headingLevel}` as const;
   const compact = columns === 4;
   // A 3-item compact grid fills the row at 3 columns instead of leaving an empty 4th slot.
@@ -68,14 +73,14 @@ export function PhotoCardGrid({
           ) : null}
           {quote ? (
             <a
-              href={whatsappUrl(`Hi Rayanco, I'd like a quote for ${item.name}.`)}
+              href={whatsappUrl(t.quoteWhatsapp(item.name))}
               target="_blank"
               rel="noopener noreferrer"
               className="absolute end-2.5 top-2.5 inline-flex h-8 items-center gap-1.5 rounded-full bg-steel-950/60 px-2.5 text-xs font-bold text-white ring-1 ring-white/20 backdrop-blur-sm motion-safe:transition-colors hover:bg-accent-500 hover:ring-accent-400 focus-visible:bg-accent-500 sm:end-3 sm:top-3 sm:px-3"
             >
               <WhatsAppIcon className="size-3.5 shrink-0" />
-              Quote
-              <span className="sr-only"> for {item.name} on WhatsApp</span>
+              {t.quote}
+              <span className="sr-only">{t.quoteSr(item.name)}</span>
             </a>
           ) : null}
           <div className={compact ? "p-3.5 sm:p-5" : "p-5 sm:p-6"}>

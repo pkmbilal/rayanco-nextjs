@@ -6,21 +6,27 @@ import { useState, type ChangeEvent, type FormEvent, type ReactNode } from "reac
 import { ArrowIcon, SearchIcon } from "@/components/icons";
 import { Button, buttonClasses } from "@/components/ui/Button";
 import { Chip } from "@/components/ui/Chip";
-import { getDictionary } from "@/lib/i18n";
+import { getDictionary, type Locale } from "@/lib/i18n";
 import { toQueryString, type ListingFilters as Filters } from "@/lib/listings/filters";
 import { LISTING_CONDITIONS } from "@/lib/supabase/models";
 
 const FORM_ID = "listing-filters";
 
 type Props = {
+  locale: Locale;
+  /** Locale-prefixed marketplace index ("/used-equipment" or "/ar/used-equipment"). */
+  rootPath: string;
+  /** Locale-prefixed contact page for the "get a quote" card. */
+  contactPath: string;
   /** Path the form submits to (index or a category page). */
   basePath: string;
   filters: Filters;
   /** Sidebar category links. */
-  categories: { slug: string; name_en: string }[];
+  categories: { slug: string; name: string }[];
   /** Slug of the category page we're on, if any. */
   currentCategory?: string;
-  locations: string[];
+  /** `value` is the DB value used in the URL; `label` is shown. */
+  locations: { value: string; label: string }[];
   /** The results column. */
   children: ReactNode;
 };
@@ -89,8 +95,18 @@ function RadioChip({
  * Works without JS as a plain GET form (sidebar inputs join it via the `form` attribute);
  * with JS it drops empty fields so URLs stay clean.
  */
-export function ListingFilters({ basePath, filters, categories, currentCategory, locations, children }: Props) {
-  const t = getDictionary().listings;
+export function ListingFilters({
+  locale,
+  rootPath,
+  contactPath,
+  basePath,
+  filters,
+  categories,
+  currentCategory,
+  locations,
+  children,
+}: Props) {
+  const t = getDictionary(locale).listings;
   const router = useRouter();
   const [open, setOpen] = useState(false);
 
@@ -163,7 +179,7 @@ export function ListingFilters({ basePath, filters, categories, currentCategory,
             title={t.category}
             action={
               currentCategory ? (
-                <Link href={`/used-equipment${keepQs}`} className="text-[0.7rem] font-semibold text-accent-600">
+                <Link href={`${rootPath}${keepQs}`} className="text-[0.7rem] font-semibold text-accent-600">
                   {t.clear}
                 </Link>
               ) : undefined
@@ -172,14 +188,14 @@ export function ListingFilters({ basePath, filters, categories, currentCategory,
             <nav aria-label={t.browseCategories}>
               <ul className="flex flex-wrap gap-2">
                 <li>
-                  <Chip href={`/used-equipment${keepQs}`} active={!currentCategory}>
+                  <Chip href={`${rootPath}${keepQs}`} active={!currentCategory}>
                     {t.allCategories}
                   </Chip>
                 </li>
                 {categories.map((c) => (
                   <li key={c.slug}>
-                    <Chip href={`/used-equipment/${c.slug}${keepQs}`} active={c.slug === currentCategory}>
-                      {c.name_en}
+                    <Chip href={`${rootPath}/${c.slug}${keepQs}`} active={c.slug === currentCategory}>
+                      {c.name}
                     </Chip>
                   </li>
                 ))}
@@ -210,11 +226,11 @@ export function ListingFilters({ basePath, filters, categories, currentCategory,
                 <RadioChip name="location" value="" checked={!filters.location} label={t.anyLocation} tone="green" onChange={autoSubmit} />
                 {locations.map((l) => (
                   <RadioChip
-                    key={l}
+                    key={l.value}
                     name="location"
-                    value={l}
-                    checked={filters.location?.toLowerCase() === l.toLowerCase()}
-                    label={l}
+                    value={l.value}
+                    checked={filters.location?.toLowerCase() === l.value.toLowerCase()}
+                    label={l.label}
                     tone="green"
                     onChange={autoSubmit}
                   />
@@ -250,7 +266,7 @@ export function ListingFilters({ basePath, filters, categories, currentCategory,
           <div className="hidden rounded-lg bg-steel-800 p-4 text-white lg:block">
             <p className="font-display text-[1.05rem] font-bold leading-snug">{t.cantFindTitle}</p>
             <p className="mb-3.5 mt-2 text-xs leading-relaxed text-white/85">{t.cantFindText}</p>
-            <Link href="/contact" className={buttonClasses({ variant: "primary", size: "sm" })}>
+            <Link href={contactPath} className={buttonClasses({ variant: "primary", size: "sm" })}>
               {t.getQuote}
               <ArrowIcon className="size-3.5" />
             </Link>

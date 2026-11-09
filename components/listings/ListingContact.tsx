@@ -4,9 +4,10 @@ import { useState } from "react";
 import { logListingClick } from "@/app/actions/listing";
 import { PhoneIcon, WhatsAppIcon } from "@/components/icons";
 import { buttonClasses } from "@/components/ui/Button";
-import { getDictionary } from "@/lib/i18n";
+import { getDictionary, type Locale } from "@/lib/i18n";
 
 type Props = {
+  locale: Locale;
   listingId: string;
   whatsappHref: string;
   phone: { tel: string; display: string };
@@ -15,8 +16,8 @@ type Props = {
 };
 
 /** WhatsApp / call / share buttons. Clicks are logged as enquiries without blocking navigation. */
-export function ListingContact({ listingId, whatsappHref, phone, shareUrl, shareTitle }: Props) {
-  const t = getDictionary().listings;
+export function ListingContact({ locale, listingId, whatsappHref, phone, shareUrl, shareTitle }: Props) {
+  const t = getDictionary(locale).listings;
   const [copied, setCopied] = useState(false);
 
   const log = (channel: "whatsapp_click" | "call_click") => {

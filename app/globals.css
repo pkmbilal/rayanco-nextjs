@@ -54,3 +54,13 @@ body {
   outline: 2px solid var(--color-accent-500);
   outline-offset: 2px;
 }
+
+/*
+ * Arabic pages: every font role uses IBM Plex Sans Arabic (it also covers Latin).
+ * Set on <body> so it overrides the next/font variables defined on <html>.
+ */
+html[lang="ar"] body {
+  --font-figtree: var(--font-arabic), sans-serif;
+  --font-outfit: var(--font-arabic), sans-serif;
+  --font-poppins: var(--font-arabic), sans-serif;
+}
