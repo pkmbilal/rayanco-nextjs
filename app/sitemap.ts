@@ -1,7 +1,9 @@
 import type { MetadataRoute } from "next";
+import { locales, localePath } from "@/lib/i18n";
 import { absoluteUrl } from "@/lib/jsonld";
 import { categoryPath, listingPath } from "@/lib/listings/format";
 import { getCategories, getPublicListingPaths } from "@/lib/listings/queries";
+import { languageAlternates } from "@/lib/seo";
 
 type Entry = MetadataRoute.Sitemap[number];
 
@@ -17,6 +19,18 @@ const staticRoutes: { path: string; priority: number; changeFrequency: Entry["ch
   { path: "/contact", priority: 0.6, changeFrequency: "yearly" },
 ];
 
+/** One entry per locale for a locale-free path, each listing the en / ar / x-default alternates. */
+function localized(path: string, rest: Omit<Entry, "url" | "alternates">): MetadataRoute.Sitemap {
+  const languages = Object.fromEntries(
+    Object.entries(languageAlternates(path)).map(([lang, p]) => [lang, absoluteUrl(p)]),
+  );
+  return locales.map((locale) => ({
+    url: absoluteUrl(localePath(locale, path)),
+    ...rest,
+    alternates: { languages },
+  }));
+}
+
 /** Category pages and every public listing (available, reserved and sold all stay live). */
 async function dynamicEntries(): Promise<MetadataRoute.Sitemap> {
   const [categories, listings] = await Promise.all([getCategories(), getPublicListingPaths()]);
@@ -28,31 +42,29 @@ async function dynamicEntries(): Promise<MetadataRoute.Sitemap> {
     if (!prev || l.updated_at > prev) latestByCategory.set(l.category, l.updated_at);
   }
 
-  const categoryEntries: MetadataRoute.Sitemap = categories.map((c) => {
+  const categoryEntries = categories.flatMap((c) => {
     const last = latestByCategory.get(c.slug);
-    return {
-      url: absoluteUrl(categoryPath(c.slug)),
+    return localized(categoryPath(c.slug), {
       ...(last ? { lastModified: new Date(last) } : {}),
       changeFrequency: "weekly",
       priority: 0.7,
-    };
+    });
   });
 
-  const listingEntries: MetadataRoute.Sitemap = listings.map((l) => ({
-    url: absoluteUrl(listingPath(l.category, l.slug)),
-    lastModified: new Date(l.updated_at),
-    changeFrequency: "weekly",
-    priority: 0.6,
-  }));
+  const listingEntries = listings.flatMap((l) =>
+    localized(listingPath(l.category, l.slug), {
+      lastModified: new Date(l.updated_at),
+      changeFrequency: "weekly",
+      priority: 0.6,
+    }),
+  );
 
   return [...categoryEntries, ...listingEntries];
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const statics: MetadataRoute.Sitemap = staticRoutes.map((r) => ({
-    url: absoluteUrl(r.path),
-    changeFrequency: r.changeFrequency,
-    priority: r.priority,
-  }));
+  const statics = staticRoutes.flatMap((r) =>
+    localized(r.path, { changeFrequency: r.changeFrequency, priority: r.priority }),
+  );
   return [...statics, ...(await dynamicEntries())];
 }

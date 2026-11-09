@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useRef, useState, type ReactNode } from "react";
-import { getDictionary } from "@/lib/i18n";
+import { getDictionary, type Locale } from "@/lib/i18n";
 
 export type GalleryImage = { src: string; thumb: string; width: number; height: number; alt: string };
 
@@ -10,8 +10,16 @@ export type GalleryImage = { src: string; thumb: string; width: number; height: 
  * Listing photos: swipeable scroll-snap track (mobile), thumbnail strip, and a native
  * <dialog> lightbox. Every image has fixed dimensions/aspect so nothing shifts on load.
  */
-export function ListingGallery({ images, overlay }: { images: GalleryImage[]; overlay?: ReactNode }) {
-  const t = getDictionary().listings;
+export function ListingGallery({
+  locale,
+  images,
+  overlay,
+}: {
+  locale: Locale;
+  images: GalleryImage[];
+  overlay?: ReactNode;
+}) {
+  const t = getDictionary(locale).listings;
   const trackRef = useRef<HTMLDivElement>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [index, setIndex] = useState(0);

@@ -1,14 +1,24 @@
 import Image from "next/image";
 import Link from "next/link";
-import { WhatsAppIcon } from "@/components/icons";
+import { MailIcon, MapPinIcon, PhoneIcon, WhatsAppIcon } from "@/components/icons";
 import { Container } from "@/components/ui/Container";
 import { buttonClasses } from "@/components/ui/Button";
-import { getDictionary } from "@/lib/i18n";
+import { getDictionary, localePath, type Locale } from "@/lib/i18n";
 import { mainNav, site, whatsappUrl } from "@/lib/site";
+import { LanguageSwitch } from "./LanguageSwitch";
 import { MobileNav } from "./MobileNav";
 import { NavLinks } from "./NavLinks";
+import { StickyHeader } from "./StickyHeader";
 
-export function BrandMark({ eager = false, className = "" }: { eager?: boolean; className?: string }) {
+export function BrandMark({
+  tagline,
+  eager = false,
+  className = "",
+}: {
+  tagline: string;
+  eager?: boolean;
+  className?: string;
+}) {
   return (
     <span className={`flex items-center gap-2 text-white ${className}`}>
       <Image
@@ -17,69 +27,124 @@ export function BrandMark({ eager = false, className = "" }: { eager?: boolean; 
         width={site.logo.width}
         height={site.logo.height}
         loading={eager ? "eager" : "lazy"}
-        className="h-10 w-auto sm:h-12"
+        className="h-10 w-auto transition-[height] duration-300 sm:h-12 sm:group-data-[scrolled]/header:h-10"
       />
       <span className="flex flex-col items-center leading-none">
         <span className="font-display text-xl font-bold tracking-tight sm:text-[1.45rem]">{site.name}</span>
-        <span className="mt-1 text-[0.6rem] text-white/85">Buy • Sell • Trade</span>
+        <span className="mt-1 text-[0.6rem] text-white/85">{tagline}</span>
       </span>
     </span>
   );
 }
 
-export function Header() {
-  const t = getDictionary();
-  const items = mainNav.map((n) => ({ href: n.href, label: t.nav[n.labelKey] }));
-  const waHref = whatsappUrl();
+const Dot = () => <span aria-hidden="true" className="size-1 rounded-full bg-white/25" />;
 
-  // Solid bg on purpose: backdrop-filter would trap the fixed mobile drawer inside the header.
-  // Same navy as the page heroes below it, so the two read as one dark block.
+/** Thin contact strip above the main bar (md+). Not sticky, so it scrolls away. */
+function UtilityBar({ locale }: { locale: Locale }) {
+  const t = getDictionary(locale);
+  const link = "inline-flex items-center gap-1.5 transition-colors hover:text-white";
   return (
-    <header className="sticky top-0 z-50 bg-steel-950">
-      <Container className="flex h-16 items-center justify-between gap-4 sm:h-[4.5rem]">
-        <Link href="/" className="shrink-0" aria-label={`${site.name} home`}>
-          <BrandMark eager />
-        </Link>
-
-        <nav aria-label="Main" className="hidden lg:block">
-          <NavLinks items={items} />
-        </nav>
-
-        <div className="flex items-center gap-2">
-          {/* Arabic version ships in phase 2; placeholder only. */}
-          <span
-            title={t.header.switchLanguageSoon}
-            aria-disabled="true"
-            className="hidden cursor-not-allowed px-2 py-1 text-sm text-white/50 sm:inline"
-            lang="ar"
-          >
-            {t.header.switchLanguage}
+    <div className="hidden border-b border-white/5 bg-steel-900 font-ui text-xs text-white/70 md:block">
+      <Container className="flex h-9 items-center justify-between gap-6">
+        <ul className="flex items-center gap-5">
+          {site.phones.map((p) => (
+            <li key={p.tel}>
+              <a href={`tel:${p.tel}`} className={link} aria-label={`${t.header.callUs} ${p.display}`}>
+                <PhoneIcon className="size-3.5 text-accent-400" />
+                <span dir="ltr">{p.display}</span>
+              </a>
+            </li>
+          ))}
+          <li>
+            <a href={`mailto:${site.email}`} className={link} aria-label={`${t.header.emailUs} ${site.email}`}>
+              <MailIcon className="size-3.5 text-accent-400" />
+              {site.email}
+            </a>
+          </li>
+        </ul>
+        <div className="flex items-center gap-3">
+          <span className="inline-flex items-center gap-1.5">
+            <MapPinIcon className="size-3.5 text-accent-400" />
+            {t.header.locations}
           </span>
-          <a
-            href={waHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={buttonClasses({ variant: "dark", size: "sm", className: "max-sm:hidden" })}
-          >
-            <WhatsAppIcon className="size-4" />
-            {t.header.whatsapp}
-          </a>
-          <a
-            href={waHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={t.header.whatsapp}
-            className="inline-flex size-11 items-center justify-center rounded-full text-accent-400 hover:bg-white/10 sm:hidden"
-          >
-            <WhatsAppIcon className="size-6" />
-          </a>
-          <MobileNav
-            items={items}
-            whatsappHref={waHref}
-            labels={{ open: t.header.openMenu, close: t.header.closeMenu, whatsapp: t.header.whatsapp }}
+          <Dot />
+          <span>{t.header.since}</span>
+          <span aria-hidden="true" className="h-4 w-px bg-white/15" />
+          <LanguageSwitch
+            locale={locale}
+            label={t.header.switchLanguage}
+            title={t.header.switchLanguageLabel}
+            className="font-medium text-white transition-colors hover:text-accent-400"
           />
         </div>
       </Container>
-    </header>
+    </div>
+  );
+}
+
+export function Header({ locale }: { locale: Locale }) {
+  const t = getDictionary(locale);
+  const items = mainNav.map((n) => ({ href: localePath(locale, n.href), label: t.nav[n.labelKey], exact: n.href === "/" }));
+  const waHref = whatsappUrl();
+
+  return (
+    <>
+      <UtilityBar locale={locale} />
+      <StickyHeader>
+        <Container className="flex h-[var(--header-h)] items-center justify-between gap-4 transition-[height] duration-300">
+          <Link href={localePath(locale, "/")} className="shrink-0" aria-label={t.header.homeLabel}>
+            <BrandMark eager tagline={t.header.tagline} />
+          </Link>
+
+          <nav aria-label={t.header.mainNav} className="hidden lg:block">
+            <NavLinks items={items} />
+          </nav>
+
+          <div className="flex items-center gap-2 lg:gap-4">
+            <span aria-hidden="true" className="hidden h-6 w-px bg-white/15 lg:block" />
+            <LanguageSwitch
+              locale={locale}
+              label={t.header.switchLanguage}
+              title={t.header.switchLanguageLabel}
+              className="inline-flex h-9 items-center rounded-full border border-white/20 px-3 font-ui text-xs font-medium text-white transition-colors hover:border-accent-400 hover:text-accent-400 md:hidden"
+            />
+            <a
+              href={waHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={buttonClasses({
+                variant: "dark",
+                size: "sm",
+                className:
+                  "shadow-[0_4px_14px_rgb(31_157_85/0.35)] transition-[background-color,transform,box-shadow] hover:-translate-y-px hover:shadow-[0_6px_18px_rgb(31_157_85/0.45)] max-sm:hidden",
+              })}
+            >
+              <WhatsAppIcon className="size-4" />
+              {t.header.whatsapp}
+            </a>
+            <a
+              href={waHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={t.header.whatsapp}
+              className="inline-flex size-11 items-center justify-center rounded-full text-accent-400 hover:bg-white/10 sm:hidden"
+            >
+              <WhatsAppIcon className="size-6" />
+            </a>
+            <MobileNav
+              items={items}
+              whatsappHref={waHref}
+              labels={{
+                open: t.header.openMenu,
+                close: t.header.closeMenu,
+                whatsapp: t.header.whatsapp,
+                call: t.header.callUs,
+                email: t.header.emailUs,
+              }}
+            />
+          </div>
+        </Container>
+      </StickyHeader>
+    </>
   );
 }

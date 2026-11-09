@@ -1,9 +1,12 @@
 import Link from "next/link";
 import { ArrowIcon } from "@/components/icons";
-import { getDictionary } from "@/lib/i18n";
+import { getDictionary, type Locale } from "@/lib/i18n";
 import { toQueryString, type ListingFilters } from "@/lib/listings/filters";
 
-type Props = { basePath: string; filters: ListingFilters; page: number; pageCount: number };
+type Props = {
+  locale: Locale;
+  /** Locale-prefixed. */
+  basePath: string; filters: ListingFilters; page: number; pageCount: number };
 
 /** Page numbers to show: first, last, and a window around the current page. */
 function pageList(page: number, pageCount: number): (number | "gap")[] {
@@ -19,13 +22,13 @@ function pageList(page: number, pageCount: number): (number | "gap")[] {
 
 const circle = "inline-flex size-8 items-center justify-center rounded-full text-xs font-semibold";
 
-export function Pagination({ basePath, filters, page, pageCount }: Props) {
+export function Pagination({ locale, basePath, filters, page, pageCount }: Props) {
   if (pageCount <= 1) return null;
-  const t = getDictionary().listings;
+  const t = getDictionary(locale).listings;
   const href = (p: number) => `${basePath}${toQueryString({ ...filters, page: p > 1 ? p : undefined })}`;
 
   return (
-    <nav aria-label="Pagination" className="mt-8 flex items-center justify-center gap-2">
+    <nav aria-label={t.pagination} className="mt-8 flex items-center justify-center gap-2">
       {page > 1 ? (
         <Link href={href(page - 1)} rel="prev" aria-label={t.previous} className={`${circle} border-[1.5px] border-steel-300 hover:border-accent-500`}>
           <ArrowIcon className="size-3.5 rotate-180" />

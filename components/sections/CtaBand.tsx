@@ -2,17 +2,19 @@ import Image from "next/image";
 import { ArrowIcon, PhoneIcon, WhatsAppIcon } from "@/components/icons";
 import { ButtonLink } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
-import { getDictionary } from "@/lib/i18n";
+import { getDictionary, type Locale } from "@/lib/i18n";
 import { site, whatsappUrl } from "@/lib/site";
 
 /** Closing call-to-action ("Ready to trade?" band): WhatsApp + call. */
 export function CtaBand({
+  locale,
   title,
   accent,
   text,
   whatsappText,
   flushTop = false,
 }: {
+  locale: Locale;
   title?: string;
   /** Trailing part of the title shown in green. */
   accent?: string;
@@ -21,7 +23,7 @@ export function CtaBand({
   /** Drop the top padding when the band directly follows a light `<Section>`, so the gap equals one section padding. */
   flushTop?: boolean;
 }) {
-  const t = getDictionary();
+  const t = getDictionary(locale);
   const heading = title ?? t.cta.title;
   const green = accent ?? (title ? undefined : t.cta.titleAccent);
 

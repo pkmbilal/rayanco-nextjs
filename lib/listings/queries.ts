@@ -25,9 +25,10 @@ export const CACHE_TAGS = {
 export type PublicStatus = (typeof PUBLIC_STATUSES)[number];
 
 const LISTING_COLUMNS =
-  "id, ref_code, slug, title_en, make, model, year, condition, hours_or_km, capacity, location, quantity, price_sar, price_on_request, negotiable, description_en, status, published_at, sold_at, updated_at";
+  "id, ref_code, slug, title_en, title_ar, make, model, year, condition, hours_or_km, capacity, location, quantity, price_sar, price_on_request, negotiable, description_en, description_ar, status, published_at, sold_at, updated_at";
 
-const CARD_COLUMNS = "id, ref_code, slug, title_en, make, model, year, condition, location, price_sar, price_on_request, status";
+const CARD_COLUMNS =
+  "id, ref_code, slug, title_en, title_ar, make, model, year, condition, location, price_sar, price_on_request, status";
 
 const IMAGE_COLUMNS = "r2_key, thumb_key, width, height, alt_text, sort_order";
 
@@ -40,13 +41,14 @@ export type PublicImage = {
   sort_order: number;
 };
 
-export type CategoryRef = Pick<Category, "slug" | "name_en">;
+export type CategoryRef = Pick<Category, "slug" | "name_en" | "name_ar">;
 
 export type ListingCardData = {
   id: string;
   ref_code: string;
   slug: string;
   title_en: string;
+  title_ar: string | null;
   make: string | null;
   model: string | null;
   year: number | null;
@@ -65,6 +67,7 @@ export type ListingDetail = Omit<ListingCardData, "cover"> & {
   quantity: number;
   negotiable: boolean;
   description_en: string | null;
+  description_ar: string | null;
   published_at: string | null;
   sold_at: string | null;
   updated_at: string;
@@ -116,7 +119,7 @@ export async function searchListings(
 
   let query = createPublicClient()
     .from("listings")
-    .select(`${CARD_COLUMNS}, categories!inner(slug, name_en), listing_images(${IMAGE_COLUMNS})`, { count: "exact" })
+    .select(`${CARD_COLUMNS}, categories!inner(slug, name_en, name_ar), listing_images(${IMAGE_COLUMNS})`, { count: "exact" })
     .in("status", PUBLIC_STATUSES)
     .order("sort_order", { referencedTable: "listing_images" })
     .limit(1, { referencedTable: "listing_images" })
@@ -139,7 +142,7 @@ export async function searchListings(
     const term = sanitizeSearchTerm(filters.q);
     if (term) {
       const p = `%${term}%`;
-      query = query.or(`title_en.ilike.${p},make.ilike.${p},model.ilike.${p},ref_code.ilike.${p}`);
+      query = query.or(`title_en.ilike.${p},title_ar.ilike.${p},make.ilike.${p},model.ilike.${p},ref_code.ilike.${p}`);
     }
   }
 
@@ -162,7 +165,7 @@ export async function getListing(categorySlug: string, slug: string): Promise<Li
 
   const { data, error } = await createPublicClient()
     .from("listings")
-    .select(`${LISTING_COLUMNS}, category_id, categories!inner(slug, name_en), listing_images(${IMAGE_COLUMNS})`)
+    .select(`${LISTING_COLUMNS}, category_id, categories!inner(slug, name_en, name_ar), listing_images(${IMAGE_COLUMNS})`)
     .eq("slug", slug)
     .eq("categories.slug", categorySlug)
     .in("status", PUBLIC_STATUSES)
@@ -185,7 +188,7 @@ export async function getSimilarListings(listing: { id: string; category: Catego
 
   const { data, error } = await createPublicClient()
     .from("listings")
-    .select(`${CARD_COLUMNS}, categories!inner(slug, name_en), listing_images(${IMAGE_COLUMNS})`)
+    .select(`${CARD_COLUMNS}, categories!inner(slug, name_en, name_ar), listing_images(${IMAGE_COLUMNS})`)
     .eq("categories.slug", listing.category.slug)
     .neq("id", listing.id)
     .in("status", PUBLIC_STATUSES)
@@ -206,7 +209,7 @@ export async function getLatestListings(limit = 4): Promise<ListingCardData[]> {
 
   const { data, error } = await createPublicClient()
     .from("listings")
-    .select(`${CARD_COLUMNS}, categories!inner(slug, name_en), listing_images(${IMAGE_COLUMNS})`)
+    .select(`${CARD_COLUMNS}, categories!inner(slug, name_en, name_ar), listing_images(${IMAGE_COLUMNS})`)
     .in("status", ["available", "reserved"])
     .order("sort_order", { referencedTable: "listing_images" })
     .limit(1, { referencedTable: "listing_images" })

@@ -6,13 +6,21 @@ import { useForm } from "react-hook-form";
 import { submitListingEnquiry } from "@/app/actions/listing";
 import { Button } from "@/components/ui/Button";
 import { listingEnquirySchema, type ListingEnquiryInput } from "@/lib/enquiry";
-import { getDictionary } from "@/lib/i18n";
+import { getDictionary, type Locale } from "@/lib/i18n";
 
 const inputClass =
   "mt-1 block w-full rounded-full border-[1.5px] border-steel-100 bg-steel-50 px-4 py-2.5 text-base text-steel-900 placeholder:text-steel-400 focus:border-accent-500 focus:bg-white focus:outline-none sm:text-sm [&:is(textarea)]:resize-none [&:is(textarea)]:rounded-2xl";
 
-export function ListingEnquiryForm({ listingId, defaultMessage }: { listingId: string; defaultMessage: string }) {
-  const t = getDictionary().form;
+export function ListingEnquiryForm({
+  locale,
+  listingId,
+  defaultMessage,
+}: {
+  locale: Locale;
+  listingId: string;
+  defaultMessage: string;
+}) {
+  const t = getDictionary(locale).form;
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const defaults = { listingId, website: "", message: defaultMessage };
   const {

@@ -1,3 +1,4 @@
+import { localePath, type Locale } from "@/lib/i18n";
 import { site } from "@/lib/site";
 
 export type JsonLdObject = Record<string, unknown>;
@@ -10,7 +11,7 @@ export function absoluteUrl(path: string): string {
 const orgId = absoluteUrl("/#organization");
 
 /** Organization + LocalBusiness for the home page (NAP must match the footer). */
-export function organizationJsonLd(): JsonLdObject {
+export function organizationJsonLd(locale: Locale): JsonLdObject {
   const address = {
     "@type": "PostalAddress",
     streetAddress: site.address.street,
@@ -43,8 +44,13 @@ export function organizationJsonLd(): JsonLdObject {
         "@type": "LocalBusiness",
         "@id": absoluteUrl("/#localbusiness"),
         name: site.name,
-        description: "Scrap buyer in Jubail, Saudi Arabia: buying and selling ferrous and non-ferrous scrap metal since 1995.",
-        url: absoluteUrl("/"),
+        description:
+          locale === "ar"
+            ? "مشترٍ للخردة في الجبيل بالمملكة العربية السعودية: شراء وبيع خردة المعادن الحديدية وغير الحديدية منذ عام 1995."
+            : "Scrap buyer in Jubail, Saudi Arabia: buying and selling ferrous and non-ferrous scrap metal since 1995.",
+        url: absoluteUrl(localePath(locale, "/")),
+        inLanguage: locale,
+        alternateName: "ريانكو",
         image: absoluteUrl("/assets/images/Hero_bg.webp"),
         logo: absoluteUrl(site.logo.src),
         email: site.email,
@@ -59,6 +65,7 @@ export function organizationJsonLd(): JsonLdObject {
 }
 
 /** BreadcrumbList from a trail that already includes Home. */
+/** `href`s must already be locale-prefixed. */
 export function breadcrumbJsonLd(trail: { name: string; href: string }[]): JsonLdObject {
   return {
     "@context": "https://schema.org",
@@ -73,7 +80,9 @@ export function breadcrumbJsonLd(trail: { name: string; href: string }[]): JsonL
 }
 
 export type ProductJsonLdInput = {
+  locale: Locale;
   title: string;
+  /** Locale-prefixed path. */
   path: string;
   refCode: string;
   description?: string | null;
@@ -94,6 +103,7 @@ export function productJsonLd(p: ProductJsonLdInput): JsonLdObject {
   return {
     "@context": "https://schema.org",
     "@type": "Product",
+    inLanguage: p.locale,
     name: p.title,
     sku: p.refCode,
     url,

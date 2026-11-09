@@ -1,4 +1,4 @@
-/** English UI strings. The Arabic dictionary (ar.ts) must mirror this shape in phase 2. */
+/** English UI strings. The Arabic dictionary (ar.ts) mirrors this shape (TypeScript enforces it). */
 export const en = {
   nav: {
     home: "Home",
@@ -13,8 +13,15 @@ export const en = {
     openMenu: "Open menu",
     closeMenu: "Close menu",
     switchLanguage: "العربية",
-    switchLanguageSoon: "Arabic version coming soon",
+    switchLanguageLabel: "View this page in Arabic",
     skipToContent: "Skip to content",
+    tagline: "Buy • Sell • Trade",
+    homeLabel: "Rayanco home",
+    mainNav: "Main",
+    since: "Since 1995",
+    locations: "Dammam · Jubail",
+    callUs: "Call",
+    emailUs: "Email",
   },
   footer: {
     contactHeading: "Contact",
@@ -27,6 +34,32 @@ export const en = {
     rights: "All rights reserved.",
     motto: "Trade Smart. Build Sustainable.",
     designedBy: "Designed by",
+    productLinks: {
+      nonFerrous: "Non-Ferrous Metals",
+      metalScrap: "Metal Scrap & Surplus",
+      usedEquipment: "Used Equipment",
+      demolition: "Demolition",
+      allProducts: "All Products",
+    },
+    companyLinks: {
+      about: "About Us",
+      sell: "Sell Your Equipment",
+      contact: "Contact",
+      quote: "Get a Quote",
+    },
+  },
+  certifications: {
+    title: "Certifications",
+    subtitle: "Awarded and accredited by",
+    altSuffix: " certification",
+  },
+  clients: {
+    altSuffix: " logo",
+  },
+  photoCard: {
+    quote: "Quote",
+    quoteSr: (name: string) => ` for ${name} on WhatsApp`,
+    quoteWhatsapp: (name: string) => `Hi Rayanco, I'd like a quote for ${name}.`,
   },
   status: {
     available: "Available",
@@ -103,6 +136,12 @@ export const en = {
     photo: (n: number, total: number) => `Photo ${n} of ${total}`,
     close: "Close",
     browseCategories: "Browse by category",
+    pagination: "Pagination",
+    country: "KSA",
+    inSaudi: "Saudi Arabia",
+    usedEquipment: "Used Equipment",
+    enquiryDefault: (title: string, ref: string) => `I'm interested in ${title} (Ref ${ref}).`,
+    whatsappInterest: (title: string, ref: string, url: string) => `Hi, I'm interested in ${title} (Ref ${ref}) ${url}`,
     spec: {
       make: "Make",
       model: "Model",
@@ -129,6 +168,7 @@ export const en = {
     company: "Company (optional)",
     location: "Location (city or site)",
     items: "What are you selling?",
+    itemsPlaceholder: "e.g. 2 × 50-ton crawler cranes, 200 t HMS scrap, used generators",
     message: "Message",
     submit: "Send",
     sending: "Sending…",
@@ -140,4 +180,13 @@ export const en = {
   },
 } as const;
 
-export type Dictionary = typeof en;
+/** Literal string types widened to `string`, so other locales can supply their own text. */
+type Widen<T> = T extends string
+  ? string
+  : T extends (...args: infer A) => infer R
+    ? (...args: A) => Widen<R>
+    : T extends readonly (infer U)[]
+      ? readonly Widen<U>[]
+      : { [K in keyof T]: Widen<T[K]> };
+
+export type Dictionary = Widen<typeof en>;
