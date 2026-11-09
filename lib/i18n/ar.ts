@@ -23,6 +23,10 @@ export const ar: Dictionary = {
     tagline: "شراء • بيع • تجارة",
     homeLabel: "الصفحة الرئيسية لريانكو",
     mainNav: "القائمة الرئيسية",
+    since: "منذ 1995",
+    locations: "الدمام · الجبيل",
+    callUs: "اتصل",
+    emailUs: "البريد",
   },
   footer: {
     contactHeading: "اتصل بنا",

@@ -18,6 +18,10 @@ export const en = {
     tagline: "Buy • Sell • Trade",
     homeLabel: "Rayanco home",
     mainNav: "Main",
+    since: "Since 1995",
+    locations: "Dammam · Jubail",
+    callUs: "Call",
+    emailUs: "Email",
   },
   footer: {
     contactHeading: "Contact",
