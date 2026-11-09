@@ -4,8 +4,8 @@ import { CategoryCards, type CategoryCard } from "@/components/sections/Category
 import { CertificationsBand } from "@/components/sections/CertificationsBand";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { GroupNav } from "@/components/sections/GroupNav";
-import { ItemGrid } from "@/components/sections/ItemGrid";
 import { PageHero } from "@/components/sections/PageHero";
+import { PhotoCardGrid } from "@/components/sections/PhotoCardGrid";
 import { Container } from "@/components/ui/Container";
 import { Heading } from "@/components/ui/Heading";
 import { equipmentTypes, metalScrapSurplus, nonFerrousMetals, productGroups, products } from "@/content/catalog";
@@ -119,7 +119,7 @@ export default function ProductsPage() {
                   </Link>
                 ) : null}
               </div>
-              <ItemGrid items={g.items} />
+              <PhotoCardGrid items={g.items} columns={4} quote />
             </Container>
           </section>
         ))}
